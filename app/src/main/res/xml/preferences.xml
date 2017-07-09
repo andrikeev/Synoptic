@@ -1,0 +1,12 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/pref_header_style">
+        <SwitchPreference
+            android:defaultValue="@string/pref_night_mode_default"
+            android:key="@string/pref_night_mode_key"
+            android:summary="@string/pref_night_mode_sum"
+            android:title="@string/pref_night_mode"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

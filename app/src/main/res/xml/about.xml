@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="@string/about_email_developer_key"
+        android:summary="@string/about_email"
+        android:title="@string/about_email_developer_button"/>
+<!--    <Preference
+        android:key="@string/about_rate_app_key"
+        android:title="@string/about_rate_app_button"/>-->
+    <Preference
+        android:key="@string/about_view_licenses_key"
+        android:title="@string/about_view_licenses_button"/>
+    <Preference
+        android:key="@string/about_version_key"
+        android:title="@string/about_version_name"/>
+</PreferenceScreen>

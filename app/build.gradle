@@ -11,6 +11,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 26
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
 
     signingConfigs {
@@ -64,6 +65,7 @@ android {
 
 ext {
     support_version = '26.0.+'
+    dagger_version = '2.11'
 }
 
 dependencies {
@@ -71,7 +73,19 @@ dependencies {
     // tests
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
     })
     testCompile 'junit:junit:4.12'
+    // support
+    compile "com.android.support:support-annotations:$support_version"
     compile "com.android.support:appcompat-v7:$support_version"
+    compile "com.android.support:design:$support_version"
+    compile "com.android.support:support-vector-drawable:$support_version"
+    // dagger2
+    compile "com.google.dagger:dagger:$dagger_version"
+    apt "com.google.dagger:dagger-compiler:$dagger_version"
+    // jsr
+    provided 'javax.annotation:jsr250-api:1.0'
+    // licenses
+    compile 'de.psdev.licensesdialog:licensesdialog:1.8.1'
 }
