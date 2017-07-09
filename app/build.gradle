@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+apply from: "$project.rootDir/keystore/secret.gradle"
+apply from: "$project.rootDir/tools/version.gradle"
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.0"
+    defaultConfig {
+        applicationId "ru.andrikeev.android.synoptic"
+        minSdkVersion 15
+        targetSdkVersion 26
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        debug {
+            keyAlias debugAlias
+            keyPassword debugAliasPass
+            storePassword debugKeystorePass
+            storeFile file(debugKeystore)
+        }
+        release {
+            keyAlias alias
+            keyPassword aliasPass
+            storePassword keystorePass
+            storeFile file(keystore)
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), "../tools/proguard-rules.pro"
+            signingConfig signingConfigs.release
+        }
+    }
+
+    productFlavors {
+        dev {
+            signingConfig signingConfigs.debug
+            versionCode gitVersionCodeTime
+            versionName gitVersionName
+            applicationIdSuffix '.dev'
+        }
+        prod {
+            signingConfig signingConfigs.release
+            versionCode gitVersionCode
+            versionName gitVersionName
+        }
+    }
+
+    sourceSets {
+        test {
+            resources.srcDirs += ['src/test/res']
+        }
+    }
+
+}
+
+ext {
+    support_version = '26.0.+'
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    // tests
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testCompile 'junit:junit:4.12'
+    compile "com.android.support:appcompat-v7:$support_version"
+}
