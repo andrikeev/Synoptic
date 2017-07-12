@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<notices>
+    <notice>
+        <name>Dagger</name>
+        <url>http://google.github.io/dagger/</url>
+        <copyright>Copyright (C) 2012 The Dagger Authors
+        </copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+
+    <notice>
+        <name>v7 Support Libraries</name>
+        <url>http://developer.android.com/tools/support-library/setup.html</url>
+        <copyright>Copyright (C) 2011 The Android Open Source Project</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+</notices>
