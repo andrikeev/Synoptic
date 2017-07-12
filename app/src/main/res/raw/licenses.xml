@@ -3,7 +3,7 @@
     <notice>
         <name>Dagger</name>
         <url>http://google.github.io/dagger/</url>
-        <copyright>Copyright 2012 Square, Inc. Copyright 2012 Google, Inc.
+        <copyright>Copyright (C) 2012 The Dagger Authors
         </copyright>
         <license>Apache Software License 2.0</license>
     </notice>

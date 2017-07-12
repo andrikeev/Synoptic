@@ -13,8 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import ru.andrikeev.android.synoptic.R;
-import ru.andrikeev.android.synoptic.ui.activity.about.AboutActivity;
-import ru.andrikeev.android.synoptic.ui.activity.settings.SettingsActivity;
+import ru.andrikeev.android.synoptic.utils.IntentHelper;
 
 /**
  * Главный экран приложения с боковой шторкой.
@@ -53,11 +52,11 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_settings:
-                startActivity(SettingsActivity.getIntent(this));
+                IntentHelper.openSettingsActivity(this);
                 return false;
 
             case R.id.nav_about:
-                startActivity(AboutActivity.getIntent(this));
+                IntentHelper.openAboutActivity(this);
                 return false;
         }
 

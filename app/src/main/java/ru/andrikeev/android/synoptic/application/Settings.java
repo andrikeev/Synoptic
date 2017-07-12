@@ -2,10 +2,10 @@ package ru.andrikeev.android.synoptic.application;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import ru.andrikeev.android.synoptic.R;
@@ -16,14 +16,17 @@ import ru.andrikeev.android.synoptic.R;
 @Singleton
 public class Settings {
 
-    private Context context;
+    public static final String USER_PREFERENCES = "user_preferences";
 
     private SharedPreferences preferences;
 
+    private Context context;
+
     @Inject
-    public Settings(@NonNull Context context) {
+    public Settings(@NonNull @Named(USER_PREFERENCES) SharedPreferences preferences,
+                    @NonNull Context context) {
+        this.preferences = preferences;
         this.context = context;
-        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     /**

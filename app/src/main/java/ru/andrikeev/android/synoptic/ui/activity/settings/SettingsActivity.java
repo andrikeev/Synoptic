@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import ru.andrikeev.android.synoptic.R;
 import ru.andrikeev.android.synoptic.ui.activity.BaseActivity;
-import ru.andrikeev.android.synoptic.ui.activity.main.MainActivity;
+import ru.andrikeev.android.synoptic.utils.IntentHelper;
 
 /**
  * Экран настроек приложения.
@@ -34,8 +34,8 @@ public class SettingsActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
-        startActivity(MainActivity.getIntent(this));
+        super.onBackPressed();
+        IntentHelper.openMainActivity(this);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SettingsActivity extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                startActivity(MainActivity.getIntent(this));
+                IntentHelper.openMainActivity(this);
                 return true;
 
             default:

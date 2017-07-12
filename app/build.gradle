@@ -35,7 +35,7 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), "../tools/proguard-rules.pro"
             signingConfig signingConfigs.release
         }
@@ -66,6 +66,8 @@ android {
 ext {
     support_version = '26.0.+'
     dagger_version = '2.11'
+    jsr250_version = '1.0'
+    licensesdialog_version = '1.8.1'
 }
 
 dependencies {
@@ -85,7 +87,7 @@ dependencies {
     compile "com.google.dagger:dagger:$dagger_version"
     apt "com.google.dagger:dagger-compiler:$dagger_version"
     // jsr
-    provided 'javax.annotation:jsr250-api:1.0'
+    provided "javax.annotation:jsr250-api:$jsr250_version"
     // licenses
-    compile 'de.psdev.licensesdialog:licensesdialog:1.8.1'
+    compile "de.psdev.licensesdialog:licensesdialog:$licensesdialog_version"
 }

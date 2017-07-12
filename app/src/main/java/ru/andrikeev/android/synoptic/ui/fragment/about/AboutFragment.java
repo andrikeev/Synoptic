@@ -1,7 +1,5 @@
 package ru.andrikeev.android.synoptic.ui.fragment.about;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -11,6 +9,7 @@ import android.view.View;
 import de.psdev.licensesdialog.LicensesDialog;
 import ru.andrikeev.android.synoptic.BuildConfig;
 import ru.andrikeev.android.synoptic.R;
+import ru.andrikeev.android.synoptic.utils.IntentHelper;
 
 public class AboutFragment extends PreferenceFragment {
 
@@ -30,16 +29,8 @@ public class AboutFragment extends PreferenceFragment {
 
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:"));
-                intent.putExtra(Intent.EXTRA_EMAIL, getString(R.string.about_email));
-                intent.putExtra(Intent.EXTRA_SUBJECT,
-                        String.format("%s %s", getString(R.string.app_name), BuildConfig.VERSION_NAME));
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(intent);
-                    return true;
-                }
-                return false;
+                return IntentHelper.sendEmail(getActivity(), getString(R.string.about_email),
+                        String.format("%s %s", getString(R.string.app_name), BuildConfig.VERSION_NAME), null);
             }
         });
 
