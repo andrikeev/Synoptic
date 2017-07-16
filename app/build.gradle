@@ -12,6 +12,7 @@ android {
         targetSdkVersion 26
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        buildConfigField 'String', 'API_KEY', "\"${apiKey}\""
     }
 
     signingConfigs {
@@ -36,19 +37,21 @@ android {
         }
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), "../tools/proguard-rules.pro"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), "../tools/proguard-rules.pro"
             signingConfig signingConfigs.release
         }
     }
 
     productFlavors {
         dev {
+            buildConfigField 'String', 'BASE_URL', '"http://api.openweathermap.org/data/2.5/"'
             signingConfig signingConfigs.debug
             versionCode gitVersionCodeTime
             versionName gitVersionName
             applicationIdSuffix '.dev'
         }
         prod {
+            buildConfigField 'String', 'BASE_URL', '"http://api.openweathermap.org/data/2.5/"'
             signingConfig signingConfigs.release
             versionCode gitVersionCode
             versionName gitVersionName
@@ -68,6 +71,15 @@ ext {
     dagger_version = '2.11'
     jsr250_version = '1.0'
     licensesdialog_version = '1.8.1'
+    retrofit_version = '2.2.0'
+    rx_java_version = '2.0.7'
+    rx_android_version = '2.0.1'
+    moxy_version = '1.5.3'
+    gson_version = '2.8.0'
+    requery_version = '1.3.0'
+    canary_version = '1.5.1'
+    timber_version = '4.5.1'
+    jobs_version = '1.1.11'
 }
 
 dependencies {
@@ -85,9 +97,37 @@ dependencies {
     compile "com.android.support:support-vector-drawable:$support_version"
     // dagger2
     compile "com.google.dagger:dagger:$dagger_version"
+    compile "com.google.dagger:dagger-android:$dagger_version"
+    compile "com.google.dagger:dagger-android-support:$dagger_version"
     apt "com.google.dagger:dagger-compiler:$dagger_version"
+    apt "com.google.dagger:dagger-android-processor:$dagger_version"
+    // moxy
+    compile "com.arello-mobile:moxy:$moxy_version"
+    compile "com.arello-mobile:moxy-app-compat:$moxy_version"
+    apt "com.arello-mobile:moxy-compiler:$moxy_version"
+    // retrofit2
+    compile "com.squareup.retrofit2:retrofit:$retrofit_version"
+    compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    // requery
+    compile "io.requery:requery:$requery_version"
+    compile "io.requery:requery-android:$requery_version"
+    apt "io.requery:requery-processor:$requery_version"
+    // gson
+    compile "com.google.code.gson:gson:$gson_version"
+    // rx
+    compile "io.reactivex.rxjava2:rxjava:$rx_java_version"
+    compile "io.reactivex.rxjava2:rxandroid:$rx_android_version"
     // jsr
     provided "javax.annotation:jsr250-api:$jsr250_version"
     // licenses
     compile "de.psdev.licensesdialog:licensesdialog:$licensesdialog_version"
+    // canary
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$canary_version"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$canary_version"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$canary_version"
+    // timber
+    compile "com.jakewharton.timber:timber:$timber_version"
+    // jobs
+    compile "com.evernote:android-job:$jobs_version"
 }
