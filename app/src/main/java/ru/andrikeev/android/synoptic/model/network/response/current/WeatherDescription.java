@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 public class WeatherDescription {
 
     @SerializedName("id")
-    private long id;
+    private int id;
 
     @SerializedName("main")
     private String shortDescription;
@@ -16,7 +16,7 @@ public class WeatherDescription {
     @SerializedName("description")
     private String description;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

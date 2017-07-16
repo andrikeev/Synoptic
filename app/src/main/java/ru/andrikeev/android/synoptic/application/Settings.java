@@ -5,36 +5,48 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import ru.andrikeev.android.synoptic.R;
 
 /**
- * Настройки приложения.
+ * Application settings.
  */
 @Singleton
 public class Settings {
-
-    public static final String USER_PREFERENCES = "user_preferences";
 
     private SharedPreferences preferences;
 
     private Context context;
 
     @Inject
-    public Settings(@NonNull @Named(USER_PREFERENCES) SharedPreferences preferences,
+    public Settings(@NonNull SharedPreferences preferences,
                     @NonNull Context context) {
         this.preferences = preferences;
         this.context = context;
     }
 
     /**
-     * Настройки темы приложения.
-     *
-     * @return true, если должна отображаться тёмная тема, false - если светлая
+     * Theme settings.
      */
     public boolean isNightMode() {
-        return preferences.getBoolean(context.getString(R.string.pref_night_mode_key), false);
+        return preferences.getBoolean(context.getString(R.string.pref_night_mode_key),
+                context.getResources().getBoolean(R.bool.pref_night_mode_default));
+    }
+
+    /**
+     * Weather synchronization interval.
+     */
+    public int getSyncInterval() {
+        return preferences.getInt(context.getString(R.string.pref_sync_weather_interval_key),
+                context.getResources().getInteger(R.integer.pref_sync_weather_interval_default));
+    }
+
+    /**
+     * Is background weather synchronization enabled.
+     */
+    public boolean isSyncEnabled() {
+        return preferences.getBoolean(context.getString(R.string.pref_sync_weather_key),
+                context.getResources().getBoolean(R.bool.pref_sync_weather_default));
     }
 }

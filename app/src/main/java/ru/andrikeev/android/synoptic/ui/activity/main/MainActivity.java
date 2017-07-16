@@ -5,21 +5,36 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import ru.andrikeev.android.synoptic.R;
+import ru.andrikeev.android.synoptic.ui.activity.BaseActivity;
+import ru.andrikeev.android.synoptic.ui.fragment.weather.WeatherFragment;
 import ru.andrikeev.android.synoptic.utils.IntentHelper;
 
 /**
  * Главный экран приложения с боковой шторкой.
  */
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity
+        implements HasSupportFragmentInjector, NavigationView.OnNavigationItemSelectedListener {
+
+    @Inject
+    protected DispatchingAndroidInjector<Fragment> injector;
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return injector;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +51,13 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
+
+        if (savedInstanceState == null) {
+            WeatherFragment weatherFragment = WeatherFragment.create();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, weatherFragment)
+                    .commit();
+        }
     }
 
     @Override

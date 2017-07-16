@@ -3,33 +3,40 @@ package ru.andrikeev.android.synoptic.di;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-
-import static ru.andrikeev.android.synoptic.application.Settings.USER_PREFERENCES;
+import io.requery.Persistable;
+import io.requery.android.sqlite.DatabaseSource;
+import io.requery.reactivex.ReactiveEntityStore;
+import io.requery.reactivex.ReactiveSupport;
+import io.requery.sql.ConfigurationBuilder;
+import io.requery.sql.EntityDataStore;
+import ru.andrikeev.android.synoptic.model.persistence.Models;
 
 /**
- * Модуль для предоставления зависимостей, связанных с контекстом приложения.
+ * Application module.
  */
 @Module
-final public class AppModule {
+final class AppModule {
+
+    private static final String DB_NAME = "weather";
 
     @NonNull
     private Application application;
 
-    public AppModule(@NonNull final Application application) {
+    AppModule(@NonNull final Application application) {
         this.application = application;
     }
 
     /**
-     * Предоставляет контекст приложения.
+     * Provides application context.
      *
-     * @return контекст приложения
+     * @return application context
      */
     @Provides
     @Singleton
@@ -39,15 +46,33 @@ final public class AppModule {
     }
 
     /**
-     * Предоставляет хранилище для пользовательских настроек приложения.
+     * Provides shared preferences storage for application settings.
      *
-     * @return приватное хранилище для настроек пользователя
+     * @return shared preferences storage
      */
     @Provides
     @Singleton
-    @Named(USER_PREFERENCES)
     @NonNull
     SharedPreferences provideSharedPreferences() {
-        return application.getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
+        return PreferenceManager.getDefaultSharedPreferences(application);
+    }
+
+    /**
+     * Provides {@link ReactiveEntityStore} for accessing DB in a reactive way.
+     *
+     * @return Rx data store
+     */
+    @Provides
+    @Singleton
+    @NonNull
+    public ReactiveEntityStore<Persistable> provideDataStore() {
+        final DatabaseSource source = new DatabaseSource(application, Models.DEFAULT, DB_NAME, 1) {
+            @Override
+            protected void onConfigure(ConfigurationBuilder builder) {
+                super.onConfigure(builder);
+                builder.setQuoteColumnNames(true);
+            }
+        };
+        return ReactiveSupport.toReactiveStore(new EntityDataStore<Persistable>(source.getConfiguration()));
     }
 }
