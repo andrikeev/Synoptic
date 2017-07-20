@@ -6,9 +6,22 @@ import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import ru.andrikeev.android.synoptic.R;
+import com.evernote.android.job.JobManager;
 
-public class SettingsFragment extends PreferenceFragment {
+import javax.inject.Inject;
+
+import ru.andrikeev.android.synoptic.R;
+import ru.andrikeev.android.synoptic.application.Settings;
+import ru.andrikeev.android.synoptic.di.Injectable;
+import ru.andrikeev.android.synoptic.model.sync.FetchWeatherJob;
+
+public class SettingsFragment extends PreferenceFragment implements Injectable {
+
+    @Inject
+    protected JobManager jobManager;
+
+    @Inject
+    protected Settings settings;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,5 +42,26 @@ public class SettingsFragment extends PreferenceFragment {
                 return true;
             }
         });
+
+        Preference.OnPreferenceChangeListener onSyncPreferenceChangeListener =
+                new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object o) {
+                        initScheduledJob();
+                        return true;
+                    }
+                };
+        Preference syncPreference = findPreference(getString(R.string.pref_sync_weather_key));
+        syncPreference.setOnPreferenceChangeListener(onSyncPreferenceChangeListener);
+
+        Preference syncIntervalPreference = findPreference(getString(R.string.pref_sync_weather_interval_key));
+        syncIntervalPreference.setOnPreferenceChangeListener(onSyncPreferenceChangeListener);
+    }
+
+    private void initScheduledJob() {
+        jobManager.cancelAll();
+        if (settings.isSyncEnabled() && jobManager.getAllJobRequestsForTag(FetchWeatherJob.TAG).size() == 0) {
+            FetchWeatherJob.scheduleJob(settings.getSyncInterval());
+        }
     }
 }

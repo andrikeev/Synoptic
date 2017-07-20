@@ -3,14 +3,23 @@ package ru.andrikeev.android.synoptic.di;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import ru.andrikeev.android.synoptic.application.Settings;
+import dagger.android.AndroidInjectionModule;
+import dagger.android.AndroidInjector;
+import ru.andrikeev.android.synoptic.application.App;
 
 /**
- * Компонент для предоставления зависимостей.
+ * Application component for dependencies injection.
  */
 @Singleton
-@Component(modules = {AppModule.class})
-public interface AppComponent {
+@Component(modules = {
+        AndroidInjectionModule.class,
+        AppModule.class,
+        NetworkModule.class,
+        JobModule.class,
+        ActivityModule.class
+})
+interface AppComponent extends AndroidInjector<App> {
 
-    Settings provideSettings();
+    @Override
+    void inject(App application);
 }
