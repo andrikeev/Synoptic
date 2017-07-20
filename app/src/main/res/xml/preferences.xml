@@ -10,6 +10,18 @@
     </android.support.v7.preference.PreferenceCategory>
 
     <android.support.v7.preference.PreferenceCategory
+        android:title="@string/pref_header_units">
+        <android.support.v7.preference.ListPreference
+            android:defaultValue="@string/pref_temp_units_default"
+            android:dependency="@string/pref_temp_units_key"
+            android:entries="@array/pref_temp_units"
+            android:entryValues="@array/pref_temp_units_values"
+            android:key="@string/pref_temp_units_key"
+            android:summary="%s"
+            android:title="@string/pref_temp_units"/>
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory
         android:title="@string/pref_header_sync">
         <android.support.v7.preference.SwitchPreferenceCompat
             android:defaultValue="@bool/pref_sync_weather_default"

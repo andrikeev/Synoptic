@@ -14,6 +14,12 @@
     <string name="pref_night_mode">Night mode</string>
     <string name="pref_night_mode_sum">Light text on a dark background</string>
     <string name="pref_night_mode_key" translatable="false">pref_keys.night_mode</string>
+    <string name="pref_header_units">Units</string>
+    <string name="pref_temp_units">Temperature units</string>
+    <string name="pref_temp_units_key" translatable="false">pref_keys.temp_units</string>
+    <string name="pref_temp_units_default" translatable="false">CELSIUS</string>
+    <string name="pref_temp_units_celsius" translatable="false">Celsius ˚C</string>
+    <string name="pref_temp_units_fahrenheit" translatable="false">Fahrenheit ˚F</string>
     <string name="pref_header_sync">Sync</string>
     <string name="pref_sync_weather">Sync weather</string>
     <string name="pref_sync_weather_sum">Sync weather</string>
@@ -28,6 +34,7 @@
     <string name="pref_sync_weather_interval_3_hours">3 hours</string>
     <string name="pref_sync_weather_interval_6_hours">6 hours</string>
     <string name="pref_sync_weather_interval_12_hours">12 hours</string>
+    <string name="pref_locale_default">en</string>
 
     <!-- About -->
     <string name="about_activity_title">About</string>

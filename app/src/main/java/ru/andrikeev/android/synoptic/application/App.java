@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.evernote.android.job.JobManager;
+import com.facebook.stetho.Stetho;
 
 import javax.inject.Inject;
 
@@ -45,6 +46,7 @@ public final class App extends Application implements HasActivityInjector {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
+            Stetho.initializeWithDefaults(this);
         }
 
         AppInjector.init(this);

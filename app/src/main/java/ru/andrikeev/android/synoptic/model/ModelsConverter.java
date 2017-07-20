@@ -1,9 +1,9 @@
 package ru.andrikeev.android.synoptic.model;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.Date;
+import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -22,34 +22,54 @@ public class ModelsConverter {
 
     private Settings settings;
 
-    private Context context;
-
     @Inject
-    public ModelsConverter(@NonNull Settings settings,
-                           @NonNull Context context) {
+    ModelsConverter(@NonNull Settings settings) {
         this.settings = settings;
-        this.context = context;
     }
 
     public WeatherModel toViewModel(@NonNull Weather weather) {
         return new WeatherModel(weather.getCityName(),
-                new Date(weather.getTimestamp() * 1000),
+                new Date(weather.getTimestamp()),
                 weather.getWeatherId(),
                 weather.getShortDescription(),
                 weather.getDescription(),
-                UnitsUtils.formatTemperature(weather.getTemperature(), UnitsUtils.Units.METRIC),
+                UnitsUtils.formatTemperature(weather.getTemperature(), settings.getTempUnits()),
                 UnitsUtils.round(weather.getPressure()),
                 UnitsUtils.round(weather.getHumidity()),
                 UnitsUtils.round(weather.getWindSpeed()),
-                WeatherModel.WindDirection.NORTH,
+                resolveWindDirection(weather.getWindDegree()),
                 UnitsUtils.round(weather.getClouds()));
+    }
+
+    private static WeatherModel.WindDirection resolveWindDirection(float windDegree) {
+        if (windDegree >= 0 && windDegree < 33.75) {
+            return WeatherModel.WindDirection.NORTH;
+        } else if (windDegree >= 33.75 && windDegree < 78.75) {
+            return WeatherModel.WindDirection.NORTH_EAST;
+        } else if (windDegree >= 78.75 && windDegree < 123.75) {
+            return WeatherModel.WindDirection.EAST;
+        } else if (windDegree >= 123.75 && windDegree < 168.75) {
+            return WeatherModel.WindDirection.SOUTH_EAST;
+        } else if (windDegree >= 168.75 && windDegree < 213.75) {
+            return WeatherModel.WindDirection.SOUTH;
+        } else if (windDegree >= 213.75 && windDegree < 258.75) {
+            return WeatherModel.WindDirection.SOUTH_WEST;
+        } else if (windDegree >= 258.75 && windDegree < 303.75) {
+            return WeatherModel.WindDirection.WEST;
+        } else if (windDegree >= 303.75 && windDegree < 348.75) {
+            return WeatherModel.WindDirection.NORTH_WEST;
+        } else if (windDegree >= 348.75 && windDegree <= 360) {
+            return WeatherModel.WindDirection.NORTH;
+        } else {
+            throw new IllegalStateException(String.format(Locale.ENGLISH, "Wrong wind degree %.3f", windDegree));
+        }
     }
 
     public Weather toDbModel(@NonNull WeatherResponse weatherResponse) {
         return new Weather(
                 weatherResponse.getCityId(),
                 weatherResponse.getCity(),
-                weatherResponse.getDate(),
+                weatherResponse.getDate() * 1000,
                 weatherResponse.getWeatherDescription().getId(),
                 weatherResponse.getWeatherDescription().getShortDescription(),
                 weatherResponse.getWeatherDescription().getDescription(),

@@ -24,7 +24,9 @@ public class WeatherRepository {
      * From API documentation: "Do not send requests more than 1 time per 10 minutes
      * from one device/one API key. Normally the weather is not changing so frequently."
      */
-    private static final long FETCH_MIN_TIMEOUT = 600000L;
+    private static final long FETCH_MIN_TIMEOUT = 600_000_000L;
+
+    private static long CITY_STUB_ID = 5601538L; // TODO: change to user choice
 
     @NonNull
     private PublishSubject<Resource<WeatherModel>> subject = PublishSubject.create();
@@ -47,13 +49,18 @@ public class WeatherRepository {
         this.converter = converter;
     }
 
+    private static boolean shouldFetchWeather(@NonNull Weather weather) {
+        return System.currentTimeMillis() - weather.getTimestamp() > FETCH_MIN_TIMEOUT;
+    }
+
+    @NonNull
     public Observable<Resource<WeatherModel>> loadWeather() {
-        return storage.getWeather()
-                .switchIfEmpty(loadRemoteAndSave().toObservable())
+        return storage.getWeather(CITY_STUB_ID)
+                .switchIfEmpty(loadRemoteAndSave(CITY_STUB_ID).toObservable())
                 .map(new Function<Weather, Resource<WeatherModel>>() {
                     @Override
                     public Resource<WeatherModel> apply(@NonNull Weather weather) throws Exception {
-                        if (System.currentTimeMillis() - weather.getTimestamp() > FETCH_MIN_TIMEOUT) {
+                        if (shouldFetchWeather(weather)) {
                             fetchWeather();
                             return Resource.fetching(converter.toViewModel(weather));
                         } else {
@@ -63,14 +70,15 @@ public class WeatherRepository {
                 })
                 .concatWith(subject)
                 .observeOn(AndroidSchedulers.mainThread());
-
     }
 
-    private Single<Weather> loadRemoteAndSave() {
-        return weatherService.loadWeather()
+    @NonNull
+    private Single<Weather> loadRemoteAndSave(long cityId) {
+        return weatherService.loadWeather(cityId)
                 .map(new Function<WeatherResponse, Weather>() {
                     @Override
                     public Weather apply(@NonNull WeatherResponse weatherResponse) throws Exception {
+                        Timber.d("Weather loaded from api: %s", weatherResponse);
                         Weather weather = converter.toDbModel(weatherResponse);
                         storage.saveOrUpdate(weather);
                         return weather;
@@ -79,7 +87,7 @@ public class WeatherRepository {
     }
 
     public void fetchWeather() {
-        loadRemoteAndSave().subscribe(
+        loadRemoteAndSave(CITY_STUB_ID).subscribe(
                 new Consumer<Weather>() {
                     @Override
                     public void accept(@NonNull Weather weather) throws Exception {
@@ -90,7 +98,7 @@ public class WeatherRepository {
                 new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
-                        Timber.e("Error fetching weather", throwable);
+                        Timber.e(throwable, "Error fetching weather");
                         subject.onNext(Resource.<WeatherModel>error(throwable));
                     }
                 });

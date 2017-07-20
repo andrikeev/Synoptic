@@ -18,4 +18,19 @@
         <item>360</item>
         <item>720</item>
     </string-array>
+
+    <string-array name="pref_temp_units">
+        <item>@string/pref_temp_units_celsius</item>
+        <item>@string/pref_temp_units_fahrenheit</item>
+    </string-array>
+
+    <string-array name="pref_temp_units_values">
+        <item>CELSIUS</item>
+        <item>FAHRENHEIT</item>
+    </string-array>
+
+    <string-array name="pref_locales">
+        <item>ru</item>
+        <item>en</item>
+    </string-array>
 </resources>
