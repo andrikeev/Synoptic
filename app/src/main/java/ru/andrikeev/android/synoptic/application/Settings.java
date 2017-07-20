@@ -38,8 +38,9 @@ public class Settings {
      * Weather synchronization interval.
      */
     public int getSyncInterval() {
-        return preferences.getInt(context.getString(R.string.pref_sync_weather_interval_key),
-                context.getResources().getInteger(R.integer.pref_sync_weather_interval_default));
+        // WA for ListPreferenceCompat, it use String for both descriptions and values
+        return Integer.valueOf(preferences.getString(context.getString(R.string.pref_sync_weather_interval_key),
+                context.getString(R.string.pref_sync_weather_interval_default)));
     }
 
     /**
