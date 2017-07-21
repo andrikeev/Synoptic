@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.application.Settings;
 import ru.andrikeev.android.synoptic.model.network.response.WeatherResponse;
 
-public class OpenWeatherService {
+public class OpenWeatherService implements RemoteService {
 
     public static final String API_KEY_NAME = "api_key";
 
@@ -29,7 +29,7 @@ public class OpenWeatherService {
         this.apiKey = apiKey;
     }
 
-    public Single<WeatherResponse> loadWeather(long cityId) {
+    public Single<WeatherResponse> getWeather(long cityId) {
         return api.getWeatherForCity(apiKey, settings.getLocale(), cityId)
                 .subscribeOn(Schedulers.io());
     }
