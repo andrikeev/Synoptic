@@ -82,7 +82,6 @@ public class WeatherDataBase {
         entity.setCityName(weather.getCityName());
         entity.setTimestamp(weather.getTimestamp());
         entity.setWeatherId(weather.getWeatherId());
-        entity.setShortDescription(weather.getShortDescription());
         entity.setDescription(weather.getDescription());
         entity.setTemperature(weather.getTemperature());
         entity.setPressure(weather.getPressure());

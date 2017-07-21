@@ -35,11 +35,6 @@ public class Weather {
     protected int weatherId;
 
     /**
-     * Краткое описание.
-     */
-    protected String shortDescription;
-
-    /**
      * Полное описание.
      */
     protected String description;
@@ -90,10 +85,6 @@ public class Weather {
         return weatherId;
     }
 
-    public String getShortDescription() {
-        return shortDescription;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -130,7 +121,6 @@ public class Weather {
         this.cityName = weather.getCityName();
         this.timestamp = weather.getTimestamp();
         this.weatherId = weather.getWeatherId();
-        this.shortDescription = weather.getShortDescription();
         this.description = weather.getDescription();
         this.temperature = weather.getTemperature();
         this.pressure = weather.getPressure();
@@ -144,7 +134,6 @@ public class Weather {
                    @NonNull String cityName,
                    long timestamp,
                    int weatherId,
-                   @NonNull String shortDescription,
                    @NonNull String description,
                    float temperature,
                    float pressure,
@@ -156,7 +145,6 @@ public class Weather {
         this.cityName = cityName;
         this.timestamp = timestamp;
         this.weatherId = weatherId;
-        this.shortDescription = shortDescription;
         this.description = description;
         this.temperature = temperature;
         this.pressure = pressure;
