@@ -7,7 +7,7 @@ import com.evernote.android.job.JobRequest;
 
 import java.util.concurrent.TimeUnit;
 
-import ru.andrikeev.android.synoptic.model.repository.WeatherRepositoryImpl;
+import ru.andrikeev.android.synoptic.model.repository.WeatherRepository;
 import timber.log.Timber;
 
 /**
@@ -17,9 +17,9 @@ public class FetchWeatherJob extends Job {
 
     public static final String TAG = "SyncWeatherJob";
 
-    private WeatherRepositoryImpl repository;
+    private WeatherRepository repository;
 
-    FetchWeatherJob(@NonNull WeatherRepositoryImpl repository) {
+    FetchWeatherJob(@NonNull WeatherRepository repository) {
         this.repository = repository;
     }
 
