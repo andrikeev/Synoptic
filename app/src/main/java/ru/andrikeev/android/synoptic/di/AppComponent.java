@@ -13,8 +13,10 @@ import ru.andrikeev.android.synoptic.application.App;
 @Singleton
 @Component(modules = {
         AndroidInjectionModule.class,
+        BindsModule.class,
         AppModule.class,
         NetworkModule.class,
+        RepositoryModule.class,
         JobModule.class,
         ActivityModule.class
 })
