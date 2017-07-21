@@ -9,7 +9,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.andrikeev.android.synoptic.model.repository.WeatherRepository;
+import ru.andrikeev.android.synoptic.model.repository.WeatherRepositoryImpl;
 import ru.andrikeev.android.synoptic.model.sync.JobCreatorImpl;
 
 /**
@@ -30,7 +30,7 @@ final class JobModule {
     @Provides
     @Singleton
     @NonNull
-    JobCreatorImpl provideWeatherJobCreator(@NonNull WeatherRepository repository) {
+    JobCreatorImpl provideWeatherJobCreator(@NonNull WeatherRepositoryImpl repository) {
         return new JobCreatorImpl(repository);
     }
 }

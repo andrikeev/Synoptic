@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.functions.Consumer;
@@ -19,23 +18,24 @@ import timber.log.Timber;
  * Local storage for cached weather.
  */
 @Singleton
-public class WeatherDataBase {
+public class WeatherDataStore implements CacheService {
 
     @NonNull
     private ReactiveEntityStore<Persistable> dataStore;
 
     @Inject
-    WeatherDataBase(@NonNull ReactiveEntityStore<Persistable> dataStore) {
+    WeatherDataStore(@NonNull ReactiveEntityStore<Persistable> dataStore) {
         this.dataStore = dataStore;
     }
 
     @NonNull
-    public Observable<Weather> getWeather(long cityId) {
+    public Single<Weather> getWeather(long cityId) {
         return dataStore.select(WeatherEntity.class)
                 .where(WeatherEntity.CITY_ID.eq(cityId))
                 .get()
                 .observable()
                 .subscribeOn(Schedulers.io())
+                .singleOrError()
                 .map(new Function<WeatherEntity, Weather>() {
                     @Override
                     public Weather apply(@NonNull WeatherEntity weatherEntity) throws Exception {
@@ -45,7 +45,7 @@ public class WeatherDataBase {
                 });
     }
 
-    public void saveOrUpdate(@NonNull final Weather weather) {
+    public void cacheWeather(@NonNull final Weather weather) {
         Single<WeatherEntity> insertion = dataStore.insert(new WeatherEntity(weather)).subscribeOn(Schedulers.io());
 
         dataStore.select(WeatherEntity.class)

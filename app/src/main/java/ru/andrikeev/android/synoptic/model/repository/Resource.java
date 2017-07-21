@@ -29,15 +29,15 @@ public class Resource<T> {
         this.error = error;
     }
 
-    public static <T> Resource<T> success(@Nullable T data) {
+    static <T> Resource<T> success(@Nullable T data) {
         return new Resource<>(SUCCESS, data, null);
     }
 
-    public static <T> Resource<T> error(@NonNull Throwable error) {
+    static <T> Resource<T> error(@NonNull Throwable error) {
         return new Resource<>(ERROR, null, error);
     }
 
-    public static <T> Resource<T> fetching(@Nullable T data) {
+    static <T> Resource<T> fetching(@Nullable T data) {
         return new Resource<>(FETCHING, data, null);
     }
 
