@@ -44,4 +44,5 @@
 -keep public class com.evernote.android.job.JobBootReceiver
 -keep public class com.evernote.android.job.JobRescheduleService
 
-#
+# Dagger
+-dontwarn com.google.errorprone.annotations.*
