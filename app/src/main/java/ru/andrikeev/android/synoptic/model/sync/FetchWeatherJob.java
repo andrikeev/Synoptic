@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
 
+import java.util.concurrent.TimeUnit;
+
 import ru.andrikeev.android.synoptic.model.repository.WeatherRepository;
 import timber.log.Timber;
 
@@ -31,9 +33,9 @@ public class FetchWeatherJob extends Job {
         return Result.SUCCESS;
     }
 
-    public static int scheduleJob(int millis) {
+    public static int scheduleJob(int minutes) {
         return new JobRequest.Builder(TAG)
-                .setPeriodic(millis)
+                .setPeriodic(TimeUnit.MINUTES.toMillis(minutes))
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                 .setUpdateCurrent(true)
                 .setPersisted(true)

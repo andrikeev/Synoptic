@@ -18,20 +18,21 @@ import ru.andrikeev.android.synoptic.model.data.WeatherModel;
 import ru.andrikeev.android.synoptic.presentation.presenter.weather.WeatherPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.WeatherView;
 import ru.andrikeev.android.synoptic.ui.fragment.BaseFragment;
-import ru.andrikeev.android.synoptic.utils.DateUtils;
 
 public class WeatherFragment extends BaseFragment<WeatherView, WeatherPresenter> implements WeatherView {
 
     private SwipeRefreshLayout refreshLayout;
     private TextView cityName;
+    private TextView lastUpdate;
     private ImageView weatherIcon;
     private TextView temperature;
-    private TextView shortDescription;
+    private TextView temperatureUnits;
     private TextView description;
     private TextView pressure;
     private TextView humidity;
     private TextView wind;
-    private TextView lastUpdate;
+    private ImageView windDirection;
+    private TextView clouds;
 
     @Inject
     @InjectPresenter
@@ -51,14 +52,16 @@ public class WeatherFragment extends BaseFragment<WeatherView, WeatherPresenter>
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         cityName = view.findViewById(R.id.cityName);
+        lastUpdate = view.findViewById(R.id.lastUpdate);
         weatherIcon = view.findViewById(R.id.weatherIcon);
         temperature = view.findViewById(R.id.temperature);
-        shortDescription = view.findViewById(R.id.shortDescription);
+        temperatureUnits = view.findViewById(R.id.temperatureUnits);
         description = view.findViewById(R.id.description);
         pressure = view.findViewById(R.id.pressure);
         humidity = view.findViewById(R.id.humidity);
         wind = view.findViewById(R.id.wind);
-        lastUpdate = view.findViewById(R.id.lastUpdate);
+        windDirection = view.findViewById(R.id.windDirection);
+        clouds = view.findViewById(R.id.clouds);
 
         refreshLayout = view.findViewById(R.id.refreshLayout);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -86,17 +89,16 @@ public class WeatherFragment extends BaseFragment<WeatherView, WeatherPresenter>
     @Override
     public void showWeather(WeatherModel model) {
         cityName.setText(model.getCityName());
-        shortDescription.setText(model.getShortDescription());
+        lastUpdate.setText(model.getDate());
+        weatherIcon.setImageResource(model.getWeatherIconId());
+        temperature.setText(model.getTemperature());
+        temperatureUnits.setText(model.getTemperatureUnits());
         description.setText(model.getDescription());
-        temperature.setText(String.valueOf(model.getTemperature()));
-        pressure.setText(String.valueOf(model.getPressure()));
-        humidity.setText(String.valueOf(model.getHumidity()));
-        wind.setText(String.valueOf(model.getWindSpeed()));
-        lastUpdate.setText(DateUtils.formatDate(model.getDate()));
-
-        switch (model.getWeatherId()) {
-            // TODO: set icon
-        }
+        pressure.setText(model.getPressure());
+        humidity.setText(model.getHumidity());
+        wind.setText(model.getWindSpeed());
+        windDirection.setImageResource(model.getWindDirectionIconId());
+        clouds.setText(model.getClouds());
     }
 
     @Override

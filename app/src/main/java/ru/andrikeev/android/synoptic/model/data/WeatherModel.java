@@ -2,144 +2,149 @@ package ru.andrikeev.android.synoptic.model.data;
 
 import android.support.annotation.NonNull;
 
-import java.util.Date;
-
 /**
  * Weather model for UI.
  */
 public class WeatherModel {
 
     /**
-     * Название города.
+     * City name.
      */
+    @NonNull
     private String cityName;
 
     /**
-     * Дата и время.
+     * Date of last weather update.
      */
-    private Date date;
+    @NonNull
+    private String date;
 
     /**
-     * Идентифиактор состояния погоды.
+     * Resource id of weather icon.
      */
-    private int weatherId;
+    private int weatherIconId;
 
     /**
-     * Краткое описание.
+     * Description of weather condition.
      */
-    private String shortDescription;
-
-    /**
-     * Полное описание.
-     */
+    @NonNull
     private String description;
 
     /**
-     * Температура.
+     * Temperature.
      */
-    private int temperature;
+    @NonNull
+    private String temperature;
 
     /**
-     * Давление.
+     * Temperature units (˚C / ˚F).
      */
-    private int pressure;
+    @NonNull
+    private String temperatureUnits;
 
     /**
-     * Влажность.
+     * Pressure.
      */
-    private int humidity;
+    @NonNull
+    private String pressure;
 
     /**
-     * Скорость ветра.
+     * Humidity.
      */
-    private int windSpeed;
+    @NonNull
+    private String humidity;
 
     /**
-     * Направление ветра.
+     * Wind speed.
      */
-    private WindDirection windDirection;
+    @NonNull
+    private String windSpeed;
 
     /**
-     * Облачность в процентах.
+     * Resource id of wind direction icon.
      */
-    private int clouds;
+    private int windDirectionIconId;
+
+    /**
+     * Clouds (%).
+     */
+    @NonNull
+    private String clouds;
 
     public WeatherModel(@NonNull String cityName,
-                        @NonNull Date date,
-                        int weatherId,
-                        @NonNull String shortDescription,
+                        @NonNull String date,
+                        int weatherIconId,
                         @NonNull String description,
-                        int temperature,
-                        int pressure,
-                        int humidity,
-                        int windSpeed,
-                        @NonNull WindDirection windDirection,
-                        int clouds) {
+                        @NonNull String temperature,
+                        @NonNull String temperatureUnits,
+                        @NonNull String pressure,
+                        @NonNull String humidity,
+                        @NonNull String windSpeed,
+                        int windDirectionIconId,
+                        @NonNull String clouds) {
         this.cityName = cityName;
         this.date = date;
-        this.weatherId = weatherId;
-        this.shortDescription = shortDescription;
+        this.weatherIconId = weatherIconId;
         this.description = description;
         this.temperature = temperature;
+        this.temperatureUnits = temperatureUnits;
         this.pressure = pressure;
         this.humidity = humidity;
         this.windSpeed = windSpeed;
-        this.windDirection = windDirection;
+        this.windDirectionIconId = windDirectionIconId;
         this.clouds = clouds;
     }
 
+    @NonNull
     public String getCityName() {
         return cityName;
     }
 
-    public Date getDate() {
+    @NonNull
+    public String getDate() {
         return date;
     }
 
-    public int getWeatherId() {
-        return weatherId;
+    public int getWeatherIconId() {
+        return weatherIconId;
     }
 
-    public String getShortDescription() {
-        return shortDescription;
-    }
-
+    @NonNull
     public String getDescription() {
         return description;
     }
 
-    public float getTemperature() {
+    @NonNull
+    public String getTemperature() {
         return temperature;
     }
 
-    public float getPressure() {
+    @NonNull
+    public String getTemperatureUnits() {
+        return temperatureUnits;
+    }
+
+    @NonNull
+    public String getPressure() {
         return pressure;
     }
 
-    public float getHumidity() {
+    @NonNull
+    public String getHumidity() {
         return humidity;
     }
 
-    public float getWindSpeed() {
+    @NonNull
+    public String getWindSpeed() {
         return windSpeed;
     }
 
-    public WindDirection getWindDirection() {
-        return windDirection;
+    public int getWindDirectionIconId() {
+        return windDirectionIconId;
     }
 
-    public float getClouds() {
+    @NonNull
+    public String getClouds() {
         return clouds;
-    }
-
-    public enum WindDirection {
-        NORTH,
-        NORTH_EAST,
-        EAST,
-        SOUTH_EAST,
-        SOUTH,
-        SOUTH_WEST,
-        WEST,
-        NORTH_WEST
     }
 }

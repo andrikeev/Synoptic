@@ -1,29 +1,41 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
+    <android.support.v7.preference.PreferenceCategory
         android:title="@string/pref_header_style">
-        <SwitchPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:defaultValue="@bool/pref_night_mode_default"
             android:key="@string/pref_night_mode_key"
             android:summary="@string/pref_night_mode_sum"
             android:title="@string/pref_night_mode"/>
-    </PreferenceCategory>
+    </android.support.v7.preference.PreferenceCategory>
 
-    <PreferenceCategory
+    <android.support.v7.preference.PreferenceCategory
+        android:title="@string/pref_header_units">
+        <android.support.v7.preference.ListPreference
+            android:defaultValue="@string/pref_temp_units_default"
+            android:dependency="@string/pref_temp_units_key"
+            android:entries="@array/pref_temp_units"
+            android:entryValues="@array/pref_temp_units_values"
+            android:key="@string/pref_temp_units_key"
+            android:summary="%s"
+            android:title="@string/pref_temp_units"/>
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory
         android:title="@string/pref_header_sync">
-        <SwitchPreference
+        <android.support.v7.preference.SwitchPreferenceCompat
             android:defaultValue="@bool/pref_sync_weather_default"
             android:key="@string/pref_sync_weather_key"
             android:summary="@string/pref_sync_weather_sum"
             android:title="@string/pref_sync_weather"/>
-        <ListPreference
-            android:defaultValue="@integer/pref_sync_weather_interval_default"
+        <android.support.v7.preference.ListPreference
+            android:defaultValue="@string/pref_sync_weather_interval_default"
             android:dependency="@string/pref_sync_weather_key"
             android:entries="@array/pref_sync_weather_intervals"
             android:entryValues="@array/pref_sync_weather_interval_values"
             android:key="@string/pref_sync_weather_interval_key"
             android:summary="%s"
             android:title="@string/pref_sync_weather_interval"/>
-    </PreferenceCategory>
+    </android.support.v7.preference.PreferenceCategory>
 
-</PreferenceScreen>
+</android.support.v7.preference.PreferenceScreen>

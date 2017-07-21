@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Synoptic</string>
+    <string name="app_name">Синоптик</string>
     <string name="about_activity_title">О приложении</string>
     <string name="about_email_developer_button">Написать разработчику</string>
     <string name="about_rate_app_button">Оценить приложение</string>
@@ -13,4 +13,25 @@
     <string name="pref_header_style">Внешний вид</string>
     <string name="pref_night_mode">Ночной режим</string>
     <string name="pref_night_mode_sum">Светлый текст на тёмном фоне</string>
+    <string name="weather_pressure_bar">%1$d бар</string>
+    <string name="weather_pressure_inHg">%1$d дюйм рт. ст.</string>
+    <string name="weather_pressure_mmHg">%1$d мм рт. ст.</string>
+    <string name="weather_pressure_pascals">%1$d Па</string>
+    <string name="weather_wind_kph">%1$d км/ч</string>
+    <string name="weather_wind_mph">%1$d миль/ч</string>
+    <string name="weather_wind_mps">%1$d м/с</string>
+    <string name="pref_temp_units_fahrenheit">Фаренгейт ˚F</string>
+    <string name="pref_temp_units_celsius">Цельсий ˚C</string>
+    <string name="pref_temp_units">Единицы измерения температуры</string>
+    <string name="pref_sync_weather_sum">Фоновая синхронизация погоды через выбранные интервалы</string>
+    <string name="pref_sync_weather">Синхронизация погоды</string>
+    <string name="pref_sync_weather_interval">Интервал синхронизации</string>
+    <string name="pref_sync_weather_interval_12_hours">12 часов</string>
+    <string name="pref_sync_weather_interval_15_min">15 минут</string>
+    <string name="pref_sync_weather_interval_1_hour">1 час</string>
+    <string name="pref_sync_weather_interval_30_min">30 минут</string>
+    <string name="pref_sync_weather_interval_3_hours">3 часа</string>
+    <string name="pref_sync_weather_interval_6_hours">6 часов</string>
+    <string name="pref_header_sync">Синхронизация</string>
+    <string name="pref_header_units">Единицы измерения</string>
 </resources>

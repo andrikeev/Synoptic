@@ -68,6 +68,7 @@ android {
 
 ext {
     support_version = '26.0.+'
+    constraint_version = '1.0.2'
     dagger_version = '2.11'
     jsr250_version = '1.0'
     licensesdialog_version = '1.8.1'
@@ -80,6 +81,7 @@ ext {
     canary_version = '1.5.1'
     timber_version = '4.5.1'
     jobs_version = '1.1.11'
+    stetho_version = '1.5.0'
 }
 
 dependencies {
@@ -93,8 +95,11 @@ dependencies {
     // support
     compile "com.android.support:support-annotations:$support_version"
     compile "com.android.support:appcompat-v7:$support_version"
+    compile "com.android.support:preference-v7:$support_version"
+    compile "com.android.support:preference-v14:$support_version"
     compile "com.android.support:design:$support_version"
     compile "com.android.support:support-vector-drawable:$support_version"
+    compile "com.android.support.constraint:constraint-layout:$constraint_version"
     // dagger2
     compile "com.google.dagger:dagger:$dagger_version"
     compile "com.google.dagger:dagger-android:$dagger_version"
@@ -130,4 +135,6 @@ dependencies {
     compile "com.jakewharton.timber:timber:$timber_version"
     // jobs
     compile "com.evernote:android-job:$jobs_version"
+    // stetho
+    compile "com.facebook.stetho:stetho:$stetho_version"
 }

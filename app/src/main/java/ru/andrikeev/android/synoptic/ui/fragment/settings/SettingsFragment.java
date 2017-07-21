@@ -1,9 +1,9 @@
 package ru.andrikeev.android.synoptic.ui.fragment.settings;
 
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.View;
 
 import com.evernote.android.job.JobManager;
@@ -14,8 +14,9 @@ import ru.andrikeev.android.synoptic.R;
 import ru.andrikeev.android.synoptic.application.Settings;
 import ru.andrikeev.android.synoptic.di.Injectable;
 import ru.andrikeev.android.synoptic.model.sync.FetchWeatherJob;
+import timber.log.Timber;
 
-public class SettingsFragment extends PreferenceFragment implements Injectable {
+public class SettingsFragment extends PreferenceFragmentCompat implements Injectable {
 
     @Inject
     protected JobManager jobManager;
@@ -24,9 +25,13 @@ public class SettingsFragment extends PreferenceFragment implements Injectable {
     protected Settings settings;
 
     @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        addPreferencesFromResource(R.xml.preferences);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
         setHasOptionsMenu(true);
     }
 
@@ -43,25 +48,31 @@ public class SettingsFragment extends PreferenceFragment implements Injectable {
             }
         });
 
-        Preference.OnPreferenceChangeListener onSyncPreferenceChangeListener =
-                new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object o) {
-                        initScheduledJob();
-                        return true;
-                    }
-                };
         Preference syncPreference = findPreference(getString(R.string.pref_sync_weather_key));
-        syncPreference.setOnPreferenceChangeListener(onSyncPreferenceChangeListener);
+        syncPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                initScheduledJob((boolean) o);
+                return true;
+            }
+        });
 
         Preference syncIntervalPreference = findPreference(getString(R.string.pref_sync_weather_interval_key));
-        syncIntervalPreference.setOnPreferenceChangeListener(onSyncPreferenceChangeListener);
+        syncIntervalPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                initScheduledJob(settings.isSyncEnabled());
+                return true;
+            }
+        });
     }
 
-    private void initScheduledJob() {
+    private void initScheduledJob(boolean enable) {
         jobManager.cancelAll();
-        if (settings.isSyncEnabled() && jobManager.getAllJobRequestsForTag(FetchWeatherJob.TAG).size() == 0) {
+        Timber.d("All jobs canceled");
+        if (enable && jobManager.getAllJobRequestsForTag(FetchWeatherJob.TAG).size() == 0) {
             FetchWeatherJob.scheduleJob(settings.getSyncInterval());
+            Timber.d("Sync job scheduled");
         }
     }
 }
