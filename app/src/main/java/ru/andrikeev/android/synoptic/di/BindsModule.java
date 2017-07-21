@@ -1,5 +1,7 @@
 package ru.andrikeev.android.synoptic.di;
 
+import com.evernote.android.job.JobCreator;
+
 import dagger.Binds;
 import dagger.Module;
 import ru.andrikeev.android.synoptic.model.ModelsConverter;
@@ -10,6 +12,7 @@ import ru.andrikeev.android.synoptic.model.persistence.CacheService;
 import ru.andrikeev.android.synoptic.model.persistence.WeatherDataStore;
 import ru.andrikeev.android.synoptic.model.repository.WeatherRepository;
 import ru.andrikeev.android.synoptic.model.repository.WeatherRepositoryImpl;
+import ru.andrikeev.android.synoptic.model.sync.JobCreatorImpl;
 
 /**
  * Module for bindings between interfaces and implementations.
@@ -28,4 +31,7 @@ abstract class BindsModule {
 
     @Binds
     abstract WeatherRepository bindWeatherRepository(WeatherRepositoryImpl repository);
+
+    @Binds
+    abstract JobCreator bindJobCreator(JobCreatorImpl jobCreator);
 }
