@@ -50,6 +50,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activity.main.MainActivity" />
         </activity>
+
+        <!-- City -->
+        <activity android:name=".ui.activity.city.CityActivity"
+            android:label="@string/city_activity_title"
+            android:noHistory="true"
+            android:parentActivityName=".ui.activity.main.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activity.main.MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

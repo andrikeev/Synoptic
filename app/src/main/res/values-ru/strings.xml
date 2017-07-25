@@ -34,4 +34,5 @@
     <string name="pref_sync_weather_interval_6_hours">6 часов</string>
     <string name="pref_header_sync">Синхронизация</string>
     <string name="pref_header_units">Единицы измерения</string>
+    <string name="city_activity_title">Выберете город</string>
 </resources>
