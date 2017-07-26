@@ -6,7 +6,7 @@ import dagger.Binds;
 import dagger.Module;
 import ru.andrikeev.android.synoptic.model.ModelsConverter;
 import ru.andrikeev.android.synoptic.model.ModelsConverterImpl;
-import ru.andrikeev.android.synoptic.model.network.OpenWeatherService;
+import ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherService;
 import ru.andrikeev.android.synoptic.model.network.RemoteService;
 import ru.andrikeev.android.synoptic.model.persistence.CacheService;
 import ru.andrikeev.android.synoptic.model.persistence.WeatherDataStore;

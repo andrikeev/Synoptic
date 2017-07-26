@@ -13,7 +13,7 @@ import io.reactivex.subjects.PublishSubject;
 import ru.andrikeev.android.synoptic.model.ModelsConverter;
 import ru.andrikeev.android.synoptic.model.data.WeatherModel;
 import ru.andrikeev.android.synoptic.model.network.RemoteService;
-import ru.andrikeev.android.synoptic.model.network.response.WeatherResponse;
+import ru.andrikeev.android.synoptic.model.network.openweather.response.WeatherResponse;
 import ru.andrikeev.android.synoptic.model.persistence.CacheService;
 import ru.andrikeev.android.synoptic.model.persistence.Weather;
 import timber.log.Timber;
