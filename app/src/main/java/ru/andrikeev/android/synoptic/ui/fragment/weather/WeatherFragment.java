@@ -137,17 +137,7 @@ public class WeatherFragment extends BaseFragment<WeatherView, WeatherPresenter>
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == REQUEST_CITY && resultCode == Activity.RESULT_OK){
-            double lon = data.getDoubleExtra(EXTRA_LON,0);
-            double lat = data.getDoubleExtra(EXTRA_LAT,0);
-
-            presenter.fetchWeather(lon,lat);
+            presenter.fetchWeather();
         }
-    }
-
-    public static Intent getResultIntent(double lon, double lat){
-        Intent intent = new Intent();
-        intent.putExtra(EXTRA_LON,lon);
-        intent.putExtra(EXTRA_LAT,lat);
-        return intent;
     }
 }

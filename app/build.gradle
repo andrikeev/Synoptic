@@ -46,7 +46,7 @@ android {
     productFlavors {
         dev {
             buildConfigField 'String', 'BASE_URL', '"http://api.openweathermap.org/data/2.5/"'
-            buildConfigField 'String', 'BASE_URL_PLACES', '"https://maps.googleapis.com/maps/api/place/textsearch/"'
+            buildConfigField 'String', 'BASE_URL_PLACES', '"https://maps.googleapis.com/maps/api/place/"'
             signingConfig signingConfigs.debug
             versionCode gitVersionCodeTime
             versionName gitVersionName
@@ -54,7 +54,7 @@ android {
         }
         prod {
             buildConfigField 'String', 'BASE_URL', '"http://api.openweathermap.org/data/2.5/"'
-            buildConfigField 'String', 'BASE_URL_PLACES', '"https://maps.googleapis.com/maps/api/place/textsearch/"'
+            buildConfigField 'String', 'BASE_URL_PLACES', '"https://maps.googleapis.com/maps/api/place/"'
             signingConfig signingConfigs.release
             versionCode gitVersionCode
             versionName gitVersionName

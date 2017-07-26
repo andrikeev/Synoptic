@@ -15,11 +15,11 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.andrikeev.android.synoptic.BuildConfig;
 import ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherApi;
-import ru.andrikeev.android.synoptic.model.network.places.GooglePlacesApi;
+import ru.andrikeev.android.synoptic.model.network.google_places.GooglePlacesApi;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherService.API_KEY_NAME;
-import static ru.andrikeev.android.synoptic.model.network.places.GooglePlacesService.API_KEY_PLACES;
+import static ru.andrikeev.android.synoptic.model.network.google_places.GooglePlacesService.API_KEY_PLACES;
 
 /**
  * Module for network dependencies.
