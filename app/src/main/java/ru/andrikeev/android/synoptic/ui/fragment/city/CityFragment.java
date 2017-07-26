@@ -47,6 +47,8 @@ public class CityFragment extends BaseFragment<CityView,CityPresenter> implement
         super.onViewCreated(view, savedInstanceState);
         editText = view.findViewById(R.id.edit_city);
 
+
+        //TODO: Dispose?
         Disposable disposable = RxTextView.textChanges(editText)
                 .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .filter(new Predicate<CharSequence>() {
