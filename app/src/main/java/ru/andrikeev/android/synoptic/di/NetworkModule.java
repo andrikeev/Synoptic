@@ -18,8 +18,8 @@ import ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherApi;
 import ru.andrikeev.android.synoptic.model.network.places.GooglePlacesApi;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static ru.andrikeev.android.synoptic.BuildConfig.API_KEY_PLACES;
 import static ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherService.API_KEY_NAME;
+import static ru.andrikeev.android.synoptic.model.network.places.GooglePlacesService.API_KEY_PLACES;
 
 /**
  * Module for network dependencies.
@@ -124,11 +124,12 @@ final class NetworkModule {
     @Provides
     @Singleton
     @NonNull
-    GooglePlacesApi providePlacesApi(@NonNull @Named(BASE_URL_PLACES) String baseUrl){
+    GooglePlacesApi providePlacesApi(@NonNull @Named(BASE_URL_PLACES) String baseUrl,@NonNull OkHttpClient client){
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build()
                 .create(GooglePlacesApi.class);
     }

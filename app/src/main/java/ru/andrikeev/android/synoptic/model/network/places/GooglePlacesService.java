@@ -5,11 +5,11 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.application.Settings;
-import ru.andrikeev.android.synoptic.model.network.places.response.Places;
+import ru.andrikeev.android.synoptic.model.network.places.response.PlacesResponse;
 
 /**
  * Created by overtired on 25.07.17.
@@ -17,7 +17,7 @@ import ru.andrikeev.android.synoptic.model.network.places.response.Places;
 
 public class GooglePlacesService {
 
-    public static final String API_KEY_PLACES = "api_key";//TODO:?
+    public static final String API_KEY_PLACES = "api_key_places";//TODO:?
 
     private GooglePlacesApi api;
 
@@ -34,8 +34,9 @@ public class GooglePlacesService {
         this.apiKey = apiKey;
     }
 
-    public Single<Places> loadPlaces(String query){
+    public Single<PlacesResponse> loadPlaces(String query){
         return api.getPlacesByQuery(apiKey,query,settings.getLocale())
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

@@ -11,7 +11,7 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.model.network.places.GooglePlacesService;
-import ru.andrikeev.android.synoptic.model.network.places.response.Places;
+import ru.andrikeev.android.synoptic.model.network.places.response.PlacesResponse;
 import ru.andrikeev.android.synoptic.presentation.presenter.RxPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.CityView;
 
@@ -28,12 +28,14 @@ public class CityPresenter extends RxPresenter<CityView>{
         @Override
         public void accept(@NonNull String s) throws Exception {
             Log.d("Hello!","Rx works!");
+
             service.loadPlaces(s)
                     .subscribeOn(Schedulers.io())
-                    .subscribe(new Consumer<Places>() {
+                    .subscribe(new Consumer<PlacesResponse>() {
                         @Override
-                        public void accept(@NonNull Places places) throws Exception {
+                        public void accept(@NonNull PlacesResponse placesResponse) throws Exception {
                             //UpdateList
+                            Log.d("Consumer", "Accepted updating");
                         }
                     });
         }
