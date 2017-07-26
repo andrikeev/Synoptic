@@ -1,4 +1,4 @@
-package ru.andrikeev.android.synoptic.model.network;
+package ru.andrikeev.android.synoptic.model.network.openweather;
 
 import android.support.annotation.NonNull;
 
@@ -8,7 +8,8 @@ import javax.inject.Named;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.application.Settings;
-import ru.andrikeev.android.synoptic.model.network.response.WeatherResponse;
+import ru.andrikeev.android.synoptic.model.network.RemoteService;
+import ru.andrikeev.android.synoptic.model.network.openweather.response.WeatherResponse;
 
 public class OpenWeatherService implements RemoteService {
 

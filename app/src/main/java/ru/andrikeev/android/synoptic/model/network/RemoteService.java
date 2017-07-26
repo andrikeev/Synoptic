@@ -1,7 +1,7 @@
 package ru.andrikeev.android.synoptic.model.network;
 
 import io.reactivex.Single;
-import ru.andrikeev.android.synoptic.model.network.response.WeatherResponse;
+import ru.andrikeev.android.synoptic.model.network.openweather.response.WeatherResponse;
 
 /**
  * Interface for remote (network) service.
