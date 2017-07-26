@@ -1,5 +1,6 @@
 package ru.andrikeev.android.synoptic.ui.fragment.weather;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +23,9 @@ import ru.andrikeev.android.synoptic.ui.activity.city.CityActivity;
 import ru.andrikeev.android.synoptic.ui.fragment.BaseFragment;
 
 public class WeatherFragment extends BaseFragment<WeatherView, WeatherPresenter> implements WeatherView {
+
+    public static final String EXTRA_LON = "extra_lon";
+    public static final String EXTRA_LAT = "extra_lat";
 
     private static final int REQUEST_CITY = 0;
 
@@ -128,5 +132,22 @@ public class WeatherFragment extends BaseFragment<WeatherView, WeatherPresenter>
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CITY && resultCode == Activity.RESULT_OK){
+            double lon = data.getDoubleExtra(EXTRA_LON,0);
+            double lat = data.getDoubleExtra(EXTRA_LAT,0);
+
+            presenter.fetchWeather(lon,lat);
+        }
+    }
+
+    public static Intent getResultIntent(double lon, double lat){
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_LON,lon);
+        intent.putExtra(EXTRA_LAT,lat);
+        return intent;
     }
 }
