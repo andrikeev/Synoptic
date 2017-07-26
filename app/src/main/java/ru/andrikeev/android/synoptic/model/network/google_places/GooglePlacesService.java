@@ -19,7 +19,7 @@ import ru.andrikeev.android.synoptic.model.network.google_places.response_predic
 
 public class GooglePlacesService {
 
-    public static final String API_KEY_PLACES = "api_key_places";//TODO:?
+    public static final String API_KEY_PLACES = "api_key_places";
 
     private GooglePlacesApi api;
 

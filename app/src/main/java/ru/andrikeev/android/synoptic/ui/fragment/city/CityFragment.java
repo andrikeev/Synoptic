@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
@@ -27,6 +28,7 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import ru.andrikeev.android.synoptic.R;
@@ -64,8 +66,7 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
         recyclerView = view.findViewById(R.id.recycler_city);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        //TODO: Dispose?
-        Disposable disposable = RxTextView.textChanges(editText)
+        RxTextView.textChanges(editText)
                 .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .filter(new Predicate<CharSequence>() {
                     @Override
@@ -128,6 +129,11 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    @Override
+    public void showError() {
+        Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show(); // TODO: show error
     }
 
     private class CityHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
