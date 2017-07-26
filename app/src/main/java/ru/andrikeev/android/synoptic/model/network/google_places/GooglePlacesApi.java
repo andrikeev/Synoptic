@@ -27,5 +27,4 @@ public interface GooglePlacesApi {
             @Query(API_KEY) String key,
             @Query(INPUT) String input,
             @Query(LANGUAGE) String language);
-    //https://maps.googleapis.com/maps/api/place/autocomplete/json?key=AIzaSyAY4H9vB8S8B4_9ESsEiQAsJW2dqUXYzw0&input=%22%D0%B2%D0%BE%D0%BB%22&language=ru&type=(cities)
 }

@@ -18,4 +18,5 @@ public interface CityView extends MvpView{
     void hideLoading();
     void hideProgressAndExit();
     void hideKeyboard();
+    void showError();
 }
