@@ -1,6 +1,7 @@
 package ru.andrikeev.android.synoptic.ui.fragment.city;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,14 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.jakewharton.rxbinding2.widget.RxTextView;
-
-import org.reactivestreams.Subscription;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -25,11 +27,10 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import ru.andrikeev.android.synoptic.R;
-import ru.andrikeev.android.synoptic.model.data.CityModel;
+import ru.andrikeev.android.synoptic.model.data.PredictionModel;
 import ru.andrikeev.android.synoptic.presentation.presenter.city.CityPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.CityView;
 import ru.andrikeev.android.synoptic.ui.fragment.BaseFragment;
@@ -40,8 +41,10 @@ import ru.andrikeev.android.synoptic.ui.fragment.weather.WeatherFragment;
  */
 
 public class CityFragment extends BaseFragment<CityView, CityPresenter> implements CityView {
+    private ImageView searchImage;
     private EditText editText;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
 
     @Inject
     @InjectPresenter
@@ -56,6 +59,8 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         editText = view.findViewById(R.id.edit_city);
+        searchImage = view.findViewById(R.id.image_search);
+        progressBar = view.findViewById(R.id.progress_bar);
         recyclerView = view.findViewById(R.id.recycler_city);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -87,13 +92,46 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
     }
 
     @Override
-    public void updateList(@android.support.annotation.NonNull List<CityModel> cities) {
+    public void updateList(@android.support.annotation.NonNull List<PredictionModel> cities) {
         recyclerView.setAdapter(new CityAdapter(cities));
+    }
+
+    @Override
+    public void showLoading() {
+        editText.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+        searchImage.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        progressBar.setVisibility(View.INVISIBLE);
+        editText.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+        searchImage.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressAndExit() {
+        getActivity().setResult(Activity.RESULT_OK);
+        getActivity().finish();
+        //WeatherFragment.getResultIntent(city.getLongitude(),city.getLatitude()));
+        //getActivity().finish();
+    }
+
+    @Override
+    public void hideKeyboard() {
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private class CityHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private CityModel city;
+        private PredictionModel city;
         private TextView textView;
 
         public CityHolder(View view){
@@ -102,7 +140,7 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
             view.setOnClickListener(this);
         }
 
-        public void setCity(CityModel city){
+        public void setCity(PredictionModel city){
             this.city = city;
             updateHolder();
         }
@@ -113,18 +151,15 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
 
         @Override
         public void onClick(View view) {
-            getActivity().setResult(Activity.RESULT_OK,
-                    WeatherFragment.getResultIntent(city.getLongitude(),city.getLatitude()));
-            getActivity().finish();
-            //TODO:return result
+            presenter.loadCity(city.getPlaceID());
         }
     }
 
     private class CityAdapter extends RecyclerView.Adapter<CityHolder>{
 
-        private List<CityModel> cities;
+        private List<PredictionModel> cities;
 
-        public CityAdapter(List<CityModel> cities){
+        public CityAdapter(List<PredictionModel> cities){
             this.cities = cities;
         }
 

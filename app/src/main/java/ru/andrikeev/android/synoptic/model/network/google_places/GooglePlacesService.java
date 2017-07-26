@@ -1,15 +1,17 @@
-package ru.andrikeev.android.synoptic.model.network.places;
+package ru.andrikeev.android.synoptic.model.network.google_places;
 
 import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.application.Settings;
-import ru.andrikeev.android.synoptic.model.network.places.response.PlacesResponse;
+import ru.andrikeev.android.synoptic.model.network.google_places.response_places.PlacesResponse;
+import ru.andrikeev.android.synoptic.model.network.google_places.response_predictions.PredictionsResponse;
 
 /**
  * Created by overtired on 25.07.17.
@@ -34,8 +36,14 @@ public class GooglePlacesService {
         this.apiKey = apiKey;
     }
 
-    public Single<PlacesResponse> loadPlaces(String query){
-        return api.getPlacesByQuery(apiKey,query,settings.getLocale())
+    public Single<PlacesResponse> loadPlace(String placeId){
+        return api.getPlacesByQuery(apiKey,placeId,settings.getLocale())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Single<PredictionsResponse> loadPredictions(String input){
+        return api.getPredictions(apiKey,input,settings.getLocale())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
