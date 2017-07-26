@@ -10,6 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.subjects.PublishSubject;
+import ru.andrikeev.android.synoptic.application.Settings;
 import ru.andrikeev.android.synoptic.model.ModelsConverter;
 import ru.andrikeev.android.synoptic.model.data.WeatherModel;
 import ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherService;
@@ -26,8 +27,6 @@ public class WeatherRepository {
      */
     private static final long FETCH_MIN_TIMEOUT = 600_000_000L;
 
-    private static long CITY_STUB_ID = 5601538L; // TODO: change to user choice
-
     @NonNull
     private PublishSubject<Resource<WeatherModel>> subject = PublishSubject.create();
 
@@ -40,13 +39,18 @@ public class WeatherRepository {
     @NonNull
     private ModelsConverter converter;
 
+    @NonNull
+    private Settings settings;
+
     @Inject
     WeatherRepository(@NonNull OpenWeatherService weatherService,
                       @NonNull WeatherDataBase storage,
-                      @NonNull ModelsConverter converter) {
+                      @NonNull ModelsConverter converter,
+                      @NonNull Settings settings) {
         this.weatherService = weatherService;
         this.storage = storage;
         this.converter = converter;
+        this.settings = settings;
     }
 
     private static boolean shouldFetchWeather(@NonNull Weather weather) {
@@ -55,8 +59,8 @@ public class WeatherRepository {
 
     @NonNull
     public Observable<Resource<WeatherModel>> loadWeather() {
-        return storage.getWeather(CITY_STUB_ID)
-                .switchIfEmpty(loadRemoteAndSave(CITY_STUB_ID).toObservable())
+        return storage.getWeather(settings.getCityId())
+                .switchIfEmpty(loadRemoteAndSave(settings.getCityId()).toObservable())
                 .map(new Function<Weather, Resource<WeatherModel>>() {
                     @Override
                     public Resource<WeatherModel> apply(@NonNull Weather weather) throws Exception {
@@ -86,8 +90,23 @@ public class WeatherRepository {
                 });
     }
 
+    @NonNull
+    Single<Weather> loadRemoteAndSave(double lon, double lat) {
+        return weatherService.loadWeather(lat, lon)
+                .map(new Function<WeatherResponse, Weather>() {
+                    @Override
+                    public Weather apply(@NonNull WeatherResponse weatherResponse) throws Exception {
+                        Timber.d("Weather loaded from api: %s", weatherResponse);
+                        Weather weather = converter.toDbModel(weatherResponse);
+                        settings.setCityId(weather.getCityId());
+                        storage.saveOrUpdate(weather);
+                        return weather;
+                    }
+                });
+    }
+
     public void fetchWeather() {
-        loadRemoteAndSave(CITY_STUB_ID).subscribe(
+        loadRemoteAndSave(settings.getCityId()).subscribe(
                 new Consumer<Weather>() {
                     @Override
                     public void accept(@NonNull Weather weather) throws Exception {
@@ -102,5 +121,23 @@ public class WeatherRepository {
                         subject.onNext(Resource.<WeatherModel>error(throwable));
                     }
                 });
+    }
+
+    public void fetchWeather(double lon, double lat) {
+        loadRemoteAndSave(lon, lat)
+                .subscribe(new Consumer<Weather>() {
+                               @Override
+                               public void accept(@NonNull Weather weather) throws Exception {
+                                   Timber.d("Weather fetched: %s", weather);
+                                   subject.onNext(Resource.success(converter.toViewModel(weather)));
+                               }
+                           },
+                        new Consumer<Throwable>() {
+                            @Override
+                            public void accept(@NonNull Throwable throwable) throws Exception {
+                                Timber.e(throwable, "Error fetching weather");
+                                subject.onNext(Resource.<WeatherModel>error(throwable));
+                            }
+                        });
     }
 }

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.application.Settings;
@@ -31,6 +32,11 @@ public class OpenWeatherService {
 
     public Single<WeatherResponse> loadWeather(long cityId) {
         return api.getWeatherForCity(apiKey, settings.getLocale(), cityId)
+                .subscribeOn(Schedulers.io());
+    }
+
+    public Single<WeatherResponse> loadWeather(double lat, double lon){
+        return api.getWeatherForCoords(apiKey,settings.getLocale(),lon,lat)
                 .subscribeOn(Schedulers.io());
     }
 }

@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
+import ru.andrikeev.android.synoptic.application.Settings;
 import ru.andrikeev.android.synoptic.model.data.WeatherModel;
 import ru.andrikeev.android.synoptic.model.repository.Resource;
 import ru.andrikeev.android.synoptic.model.repository.WeatherRepository;
@@ -70,6 +71,11 @@ public class WeatherPresenter extends RxPresenter<WeatherView> {
     public void fetchWeather() {
         getViewState().showLoading();
         repository.fetchWeather();
+    }
+
+    public void fetchWeather(double lon, double lat){
+        getViewState().showLoading();
+        repository.fetchWeather(lon, lat);
     }
 
     @Override
