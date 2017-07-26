@@ -1,6 +1,7 @@
 package ru.andrikeev.android.synoptic.ui.fragment.city;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
@@ -11,17 +12,18 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import org.reactivestreams.Subscription;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import ru.andrikeev.android.synoptic.R;
+import ru.andrikeev.android.synoptic.model.data.CityModel;
 import ru.andrikeev.android.synoptic.presentation.presenter.city.CityPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.CityView;
 import ru.andrikeev.android.synoptic.ui.fragment.BaseFragment;
@@ -76,7 +78,7 @@ public class CityFragment extends BaseFragment<CityView,CityPresenter> implement
     }
 
     @Override
-    public void updateList() {
+    public void updateList(@NonNull List<CityModel> cities) {
         //TODO:List with suggestions
     }
 }
