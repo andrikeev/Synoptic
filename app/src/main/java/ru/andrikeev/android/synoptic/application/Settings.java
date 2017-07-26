@@ -77,4 +77,15 @@ public class Settings {
             return context.getString(R.string.pref_locale_default);
         }
     }
+
+    public long getCityId(){
+        return preferences.getLong(context.getString(R.string.pref_city_id),
+                Long.decode(context.getString(R.string.pref_city_id_default)));
+    }
+
+    public void setCityId(long id){
+        preferences.edit()
+                .putLong(context.getString(R.string.pref_city_id),id)
+                .apply();
+    }
 }

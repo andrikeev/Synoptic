@@ -142,6 +142,4 @@ dependencies {
     compile "com.evernote:android-job:$jobs_version"
     // stetho
     compile "com.facebook.stetho:stetho:$stetho_version"
-
-    compile 'com.squareup.retrofit2:converter-scalars:2.1.0'
 }

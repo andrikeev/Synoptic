@@ -1,6 +1,7 @@
 package ru.andrikeev.android.synoptic.model.repository;
 
 import io.reactivex.Observable;
+
 import ru.andrikeev.android.synoptic.model.data.WeatherModel;
 
 /**
@@ -19,4 +20,5 @@ public interface WeatherRepository {
      * Start fetching, result will be returned in the subject received from {@link #loadWeather()}
      */
     void fetchWeather();
+    void fetchWeather(double lon, double lat);
 }

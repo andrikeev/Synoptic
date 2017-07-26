@@ -15,4 +15,5 @@ public interface RemoteService {
      * @return {@link Single} with loaded {@link WeatherResponse}
      */
     Single<WeatherResponse> getWeather(long cityId);
+    Single<WeatherResponse> getWeather(double lat,double lon);
 }
