@@ -5,13 +5,19 @@ import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import ru.andrikeev.android.synoptic.model.ModelsConverter;
+import ru.andrikeev.android.synoptic.model.data.CityModel;
 import ru.andrikeev.android.synoptic.model.network.places.GooglePlacesService;
+import ru.andrikeev.android.synoptic.model.network.places.ResponceConverter;
 import ru.andrikeev.android.synoptic.model.network.places.response.PlacesResponse;
+import ru.andrikeev.android.synoptic.model.persistence.Models;
 import ru.andrikeev.android.synoptic.presentation.presenter.RxPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.CityView;
 
@@ -33,9 +39,8 @@ public class CityPresenter extends RxPresenter<CityView>{
                     .subscribeOn(Schedulers.io())
                     .subscribe(new Consumer<PlacesResponse>() {
                         @Override
-                        public void accept(@NonNull PlacesResponse placesResponse) throws Exception {
-                            //UpdateList
-                            Log.d("Consumer", "Accepted updating");
+                        public void accept(PlacesResponse placesResponse) throws Exception {
+                            getViewState().updateList(ResponceConverter.toViewModel(placesResponse));
                         }
                     });
         }

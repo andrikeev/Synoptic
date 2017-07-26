@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -11,8 +12,11 @@ import javax.inject.Singleton;
 
 import ru.andrikeev.android.synoptic.R;
 import ru.andrikeev.android.synoptic.application.Settings;
+import ru.andrikeev.android.synoptic.model.data.CityModel;
 import ru.andrikeev.android.synoptic.model.data.WeatherModel;
 import ru.andrikeev.android.synoptic.model.network.openweather.response.WeatherResponse;
+import ru.andrikeev.android.synoptic.model.network.places.response.PlacesResponse;
+import ru.andrikeev.android.synoptic.model.network.places.response.Result;
 import ru.andrikeev.android.synoptic.model.persistence.Weather;
 import ru.andrikeev.android.synoptic.utils.DateUtils;
 import ru.andrikeev.android.synoptic.utils.UnitsUtils;
