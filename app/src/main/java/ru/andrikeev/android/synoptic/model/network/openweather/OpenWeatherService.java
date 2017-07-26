@@ -5,12 +5,11 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.application.Settings;
 import ru.andrikeev.android.synoptic.model.network.RemoteService;
-import ru.andrikeev.android.synoptic.model.network.openweather.response.WeatherResponse;
+import ru.andrikeev.android.synoptic.model.network.openweather.response_place.response.WeatherResponse;
 
 public class OpenWeatherService implements RemoteService {
 

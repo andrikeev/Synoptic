@@ -1,4 +1,4 @@
-package ru.andrikeev.android.synoptic.model.network.places.response;
+package ru.andrikeev.android.synoptic.model.network.google_places.response_places;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -13,11 +13,11 @@ public class PlacesResponse {
     @SerializedName("status")
     private String status;
 
-    @SerializedName("results")
-    private ArrayList<Result> results;
+    @SerializedName("result")
+    private Result resultPlace;
 
-    public ArrayList<Result> getResults() {
-        return results;
+    public Result getResultPlace() {
+        return resultPlace;
     }
 
     public String getStatus() {
