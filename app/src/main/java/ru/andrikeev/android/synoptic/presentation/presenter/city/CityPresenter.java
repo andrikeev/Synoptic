@@ -47,6 +47,11 @@ public class CityPresenter extends RxPresenter<CityView> {
                         public void accept(@NonNull PredictionsResponse predictionsResponse) throws Exception {
                             getViewState().updateList(ResponceConverter.toViewModel(predictionsResponse));
                         }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(@NonNull Throwable throwable) throws Exception {
+                            getViewState().showError();
+                        }
                     });
         }
     };
@@ -74,7 +79,11 @@ public class CityPresenter extends RxPresenter<CityView> {
                 .map(new Function<PlacesResponse, Location>() {
                     @Override
                     public Location apply(@NonNull PlacesResponse placesResponse) throws Exception {
-                        return placesResponse.getResultPlace().getGeometry().getLocation();
+                        if(placesResponse.getResultPlace()!=null) {
+                            return placesResponse.getResultPlace().getGeometry().getLocation();
+                        }else {
+                            throw new Exception("Couldn't load this city");
+                        }
                     }
                 })
                 .subscribe(new Consumer<Location>() {
@@ -95,6 +104,12 @@ public class CityPresenter extends RxPresenter<CityView> {
                                         getViewState().hideProgressAndExit();
                                     }
                                 });
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        getViewState().showError();
+                        getViewState().hideLoading();
                     }
                 });
     }
