@@ -1,9 +1,9 @@
-package ru.andrikeev.android.synoptic.model.network;
+package ru.andrikeev.android.synoptic.model.network.openweather;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import ru.andrikeev.android.synoptic.model.network.response.WeatherResponse;
+import ru.andrikeev.android.synoptic.model.network.openweather.response.WeatherResponse;
 
 /**
  * Open Weather Map API.
