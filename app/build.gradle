@@ -12,8 +12,8 @@ android {
         targetSdkVersion 26
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        buildConfigField 'String', 'API_KEY', "\"${apiKey}\""
-        buildConfigField 'String', 'API_KEY_PLACES', "\"${apiPlaces}\""
+        buildConfigField 'String', 'API_KEY', "\"${apiKeyWeather}\""
+        buildConfigField 'String', 'API_KEY_PLACES', "\"${apiKeyPlaces}\""
     }
 
     signingConfigs {
@@ -45,7 +45,7 @@ android {
 
     productFlavors {
         dev {
-            buildConfigField 'String', 'BASE_URL', '"http://api.openweathermap.org/data/2.5/"'
+            buildConfigField 'String', 'BASE_URL_WEATHER', '"http://api.openweathermap.org/data/2.5/"'
             buildConfigField 'String', 'BASE_URL_PLACES', '"https://maps.googleapis.com/maps/api/place/"'
             signingConfig signingConfigs.debug
             versionCode gitVersionCodeTime
@@ -53,7 +53,7 @@ android {
             applicationIdSuffix '.dev'
         }
         prod {
-            buildConfigField 'String', 'BASE_URL', '"http://api.openweathermap.org/data/2.5/"'
+            buildConfigField 'String', 'BASE_URL_WEATHER', '"http://api.openweathermap.org/data/2.5/"'
             buildConfigField 'String', 'BASE_URL_PLACES', '"https://maps.googleapis.com/maps/api/place/"'
             signingConfig signingConfigs.release
             versionCode gitVersionCode
