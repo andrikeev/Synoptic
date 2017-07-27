@@ -65,7 +65,6 @@
 
     <string name="pref_city_name" translatable="false">pref_keys.city_name</string>
     <string name="pref_city_id" translatable="false">pref_keys.city_id</string>
-
-    <string name="pref_city_name_default">Moscow</string>
+    
     <string name="pref_city_id_default" translatable="false">5601538</string>
 </resources>
