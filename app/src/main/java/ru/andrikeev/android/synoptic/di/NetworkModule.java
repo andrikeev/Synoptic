@@ -27,7 +27,7 @@ import static ru.andrikeev.android.synoptic.model.network.google_places.GooglePl
 @Module
 final class NetworkModule {
 
-    private static final String BASE_URL_NAME = "base_url";
+    private static final String BASE_URL_WEATHER = "base_url_weather";
     private static final String BASE_URL_PLACES = "base_url_places";
 
     /**
@@ -65,10 +65,10 @@ final class NetworkModule {
      */
     @Provides
     @Singleton
-    @Named(BASE_URL_NAME)
+    @Named(BASE_URL_WEATHER)
     @NonNull
     String provideBaseUrl() {
-        return BuildConfig.BASE_URL;
+        return BuildConfig.BASE_URL_WEATHER;
     }
 
     /**
@@ -110,7 +110,7 @@ final class NetworkModule {
     @Provides
     @Singleton
     @NonNull
-    OpenWeatherApi provideWeatherApi(@NonNull @Named(BASE_URL_NAME) String baseUrl,
+    OpenWeatherApi provideWeatherApi(@NonNull @Named(BASE_URL_WEATHER) String baseUrl,
                                      @NonNull OkHttpClient client) {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
