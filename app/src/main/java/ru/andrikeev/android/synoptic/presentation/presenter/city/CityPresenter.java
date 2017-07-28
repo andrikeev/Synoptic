@@ -1,9 +1,9 @@
 package ru.andrikeev.android.synoptic.presentation.presenter.city;
 
 
-import android.util.Log;
-
 import com.arellomobile.mvp.InjectViewState;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -12,14 +12,16 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.application.Settings;
+import ru.andrikeev.android.synoptic.model.CityResolver;
 import ru.andrikeev.android.synoptic.model.ModelsConverter;
-import ru.andrikeev.android.synoptic.model.network.google_places.GooglePlacesService;
-import ru.andrikeev.android.synoptic.model.network.google_places.ResponceConverter;
-import ru.andrikeev.android.synoptic.model.network.google_places.response_places.Location;
-import ru.andrikeev.android.synoptic.model.network.google_places.response_places.PlacesResponse;
-import ru.andrikeev.android.synoptic.model.network.google_places.response_predictions.PredictionsResponse;
+import ru.andrikeev.android.synoptic.model.data.PredictionModel;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.GooglePlacesService;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.ResponceConverter;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.responseplaces.Location;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.responseplaces.PlacesResponse;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.responsepredictions.PredictionsResponse;
 import ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherService;
-import ru.andrikeev.android.synoptic.model.network.openweather.response_place.response.WeatherResponse;
+import ru.andrikeev.android.synoptic.model.network.openweather.response.WeatherResponse;
 import ru.andrikeev.android.synoptic.model.persistence.Weather;
 import ru.andrikeev.android.synoptic.presentation.presenter.RxPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.CityView;
@@ -31,21 +33,18 @@ import ru.andrikeev.android.synoptic.presentation.view.CityView;
 @InjectViewState
 public class CityPresenter extends RxPresenter<CityView> {
 
-    Settings settings;
+    private Settings settings;
 
-    ModelsConverter converter;
-    OpenWeatherService weatherService;
-    GooglePlacesService placesService;
+    private CityResolver cityResolver;
 
     private Consumer<String> consumer = new Consumer<String>() {
         @Override
         public void accept(@NonNull String input) throws Exception {
-            placesService.loadPredictions(input)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new Consumer<PredictionsResponse>() {
+            cityResolver.loadPredictions(input)
+                    .subscribe(new Consumer<List<PredictionModel>>() {
                         @Override
-                        public void accept(@NonNull PredictionsResponse predictionsResponse) throws Exception {
-                            getViewState().updateList(ResponceConverter.toViewModel(predictionsResponse));
+                        public void accept(@NonNull List<PredictionModel> predictionModels) throws Exception {
+                            getViewState().updateList(predictionModels);
                         }
                     }, new Consumer<Throwable>() {
                         @Override
@@ -57,13 +56,9 @@ public class CityPresenter extends RxPresenter<CityView> {
     };
 
     @Inject
-    public CityPresenter(@NonNull GooglePlacesService placesService,
-                         @NonNull OpenWeatherService openWeatherService,
-                         @NonNull ModelsConverter converter,
+    public CityPresenter(@NonNull CityResolver cityResolver,
                          @NonNull Settings settings) {
-        this.placesService = placesService;
-        this.weatherService = openWeatherService;
-        this.converter = converter;
+        this.cityResolver = cityResolver;
         this.settings = settings;
     }
 
@@ -75,35 +70,12 @@ public class CityPresenter extends RxPresenter<CityView> {
         getViewState().showLoading();
         getViewState().hideKeyboard();
 
-        placesService.loadPlace(placeId)
-                .map(new Function<PlacesResponse, Location>() {
+        subscription = cityResolver.loadCityId(placeId)
+                .subscribe(new Consumer<Long>() {
                     @Override
-                    public Location apply(@NonNull PlacesResponse placesResponse) throws Exception {
-                        if(placesResponse.getResultPlace()!=null) {
-                            return placesResponse.getResultPlace().getGeometry().getLocation();
-                        }else {
-                            throw new Exception("Couldn't load this city");
-                        }
-                    }
-                })
-                .subscribe(new Consumer<Location>() {
-                    @Override
-                    public void accept(@NonNull Location location) throws Exception {
-                        weatherService.loadWeather(location.getLatitude(), location.getLongitude())
-                                .subscribeOn(Schedulers.io())
-                                .map(new Function<WeatherResponse, Weather>() {
-                                    @Override
-                                    public Weather apply(@NonNull WeatherResponse weatherResponse) throws Exception {
-                                        return converter.toDbModel(weatherResponse);
-                                    }
-                                })
-                                .subscribe(new Consumer<Weather>() {
-                                    @Override
-                                    public void accept(@NonNull Weather weather) throws Exception {
-                                        settings.setCityId(weather.getCityId());
-                                        getViewState().hideProgressAndExit();
-                                    }
-                                });
+                    public void accept(@NonNull Long cityId) throws Exception {
+                        settings.setCityId(cityId);
+                        getViewState().hideProgressAndExit();
                     }
                 }, new Consumer<Throwable>() {
                     @Override

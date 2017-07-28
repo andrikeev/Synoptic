@@ -1,8 +1,6 @@
-package ru.andrikeev.android.synoptic.model.network.google_places.response_places;
+package ru.andrikeev.android.synoptic.model.network.googleplaces.responseplaces;
 
 import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
 
 /**
  * Created by overtired on 25.07.17.

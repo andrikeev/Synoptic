@@ -14,7 +14,7 @@ import ru.andrikeev.android.synoptic.application.Settings;
 import ru.andrikeev.android.synoptic.model.ModelsConverter;
 import ru.andrikeev.android.synoptic.model.data.WeatherModel;
 import ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherService;
-import ru.andrikeev.android.synoptic.model.network.openweather.response_place.response.WeatherResponse;
+import ru.andrikeev.android.synoptic.model.network.openweather.response.WeatherResponse;
 import ru.andrikeev.android.synoptic.model.persistence.Weather;
 import ru.andrikeev.android.synoptic.model.persistence.WeatherDataBase;
 import timber.log.Timber;
@@ -91,7 +91,7 @@ public class WeatherRepository {
     }
 
     @NonNull
-    Single<Weather> loadRemoteAndSave(double lon, double lat) {
+    private Single<Weather> loadRemoteAndSave(double lon, double lat) {
         return weatherService.loadWeather(lat, lon)
                 .map(new Function<WeatherResponse, Weather>() {
                     @Override

@@ -8,7 +8,7 @@ import javax.inject.Named;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.application.Settings;
-import ru.andrikeev.android.synoptic.model.network.openweather.response_place.response.WeatherResponse;
+import ru.andrikeev.android.synoptic.model.network.openweather.response.WeatherResponse;
 
 public class OpenWeatherService {
 

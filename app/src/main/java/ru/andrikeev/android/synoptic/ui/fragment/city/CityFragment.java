@@ -33,6 +33,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import ru.andrikeev.android.synoptic.R;
 import ru.andrikeev.android.synoptic.model.data.PredictionModel;
+import ru.andrikeev.android.synoptic.model.persistence.Weather;
 import ru.andrikeev.android.synoptic.presentation.presenter.city.CityPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.CityView;
 import ru.andrikeev.android.synoptic.ui.fragment.BaseFragment;
@@ -47,6 +48,8 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
     private EditText editText;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+
+    private CityAdapter adapter;
 
     @Inject
     @InjectPresenter
@@ -65,6 +68,8 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
         progressBar = view.findViewById(R.id.progress_bar);
         recyclerView = view.findViewById(R.id.recycler_city);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new CityAdapter(getActivity(),presenter);
+        recyclerView.setAdapter(adapter);
 
         RxTextView.textChanges(editText)
                 .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
@@ -94,7 +99,9 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
 
     @Override
     public void updateList(@android.support.annotation.NonNull List<PredictionModel> cities) {
-        recyclerView.setAdapter(new CityAdapter(cities));
+        adapter.clear();
+        adapter.add(cities);
+        adapter.notifyItemRangeChanged(0,cities.size());
     }
 
     @Override
@@ -133,57 +140,5 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
     @Override
     public void showError() {
         Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show(); // TODO: show error
-    }
-
-    private class CityHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private PredictionModel city;
-        private TextView textView;
-
-        public CityHolder(View view){
-            super(view);
-            textView = view.findViewById(R.id.city_text);
-            view.setOnClickListener(this);
-        }
-
-        public void setCity(PredictionModel city){
-            this.city = city;
-            updateHolder();
-        }
-
-        private void updateHolder(){
-            textView.setText(city.getName());
-        }
-
-        @Override
-        public void onClick(View view) {
-            presenter.loadCity(city.getPlaceID());
-        }
-    }
-
-    private class CityAdapter extends RecyclerView.Adapter<CityHolder>{
-
-        private List<PredictionModel> cities;
-
-        public CityAdapter(List<PredictionModel> cities){
-            this.cities = cities;
-        }
-
-        @Override
-        public CityHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View v = inflater.inflate(R.layout.item_city,parent,false);
-            return new CityHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(CityHolder holder, int position) {
-            holder.setCity(cities.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return cities.size();
-        }
     }
 }

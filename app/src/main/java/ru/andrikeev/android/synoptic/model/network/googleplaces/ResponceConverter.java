@@ -1,4 +1,4 @@
-package ru.andrikeev.android.synoptic.model.network.google_places;
+package ru.andrikeev.android.synoptic.model.network.googleplaces;
 
 import android.support.annotation.NonNull;
 
@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.andrikeev.android.synoptic.model.data.PredictionModel;
-import ru.andrikeev.android.synoptic.model.network.google_places.response_places.PlacesResponse;
-import ru.andrikeev.android.synoptic.model.network.google_places.response_predictions.Prediction;
-import ru.andrikeev.android.synoptic.model.network.google_places.response_predictions.PredictionsResponse;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.responsepredictions.Prediction;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.responsepredictions.PredictionsResponse;
 
 /**
  * Created by overtired on 26.07.17.

@@ -1,10 +1,10 @@
-package ru.andrikeev.android.synoptic.model.network.google_places;
+package ru.andrikeev.android.synoptic.model.network.googleplaces;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import ru.andrikeev.android.synoptic.model.network.google_places.response_places.PlacesResponse;
-import ru.andrikeev.android.synoptic.model.network.google_places.response_predictions.PredictionsResponse;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.responseplaces.PlacesResponse;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.responsepredictions.PredictionsResponse;
 
 /**
  * Created by overtired on 25.07.17.
