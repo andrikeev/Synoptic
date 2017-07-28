@@ -1,4 +1,4 @@
-package ru.andrikeev.android.synoptic.model.network.google_places.response_predictions;
+package ru.andrikeev.android.synoptic.model.network.googleplaces.responsepredictions;
 
 import com.google.gson.annotations.SerializedName;
 

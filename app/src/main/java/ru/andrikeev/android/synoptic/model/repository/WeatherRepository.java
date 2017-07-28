@@ -4,7 +4,6 @@ import io.reactivex.Observable;
 
 import ru.andrikeev.android.synoptic.model.data.WeatherModel;
 
-
 /**
  * Interface for weather repository.
  */
