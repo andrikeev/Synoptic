@@ -9,20 +9,9 @@ import javax.inject.Inject;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.application.Settings;
 import ru.andrikeev.android.synoptic.model.CityResolver;
-import ru.andrikeev.android.synoptic.model.ModelsConverter;
 import ru.andrikeev.android.synoptic.model.data.PredictionModel;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.GooglePlacesService;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.ResponceConverter;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.responseplaces.Location;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.responseplaces.PlacesResponse;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.responsepredictions.PredictionsResponse;
-import ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherService;
-import ru.andrikeev.android.synoptic.model.network.openweather.response.WeatherResponse;
-import ru.andrikeev.android.synoptic.model.persistence.Weather;
 import ru.andrikeev.android.synoptic.presentation.presenter.RxPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.CityView;
 

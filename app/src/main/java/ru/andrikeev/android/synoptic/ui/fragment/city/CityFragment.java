@@ -6,14 +6,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -27,17 +24,13 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import ru.andrikeev.android.synoptic.R;
 import ru.andrikeev.android.synoptic.model.data.PredictionModel;
-import ru.andrikeev.android.synoptic.model.persistence.Weather;
 import ru.andrikeev.android.synoptic.presentation.presenter.city.CityPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.CityView;
 import ru.andrikeev.android.synoptic.ui.fragment.BaseFragment;
-import ru.andrikeev.android.synoptic.ui.fragment.weather.WeatherFragment;
 
 /**
  * Created by overtired on 25.07.17.
@@ -124,8 +117,6 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
     public void hideProgressAndExit() {
         getActivity().setResult(Activity.RESULT_OK);
         getActivity().finish();
-        //WeatherFragment.getResultIntent(city.getLongitude(),city.getLatitude()));
-        //getActivity().finish();
     }
 
     @Override

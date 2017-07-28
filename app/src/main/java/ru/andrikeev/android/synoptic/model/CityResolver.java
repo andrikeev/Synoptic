@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.annotations.NonNull;
