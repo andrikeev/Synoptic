@@ -1,4 +1,4 @@
-package ru.andrikeev.android.synoptic.model.network.openweather.response_place.response.current;
+package ru.andrikeev.android.synoptic.model.network.openweather.response.current;
 
 import com.google.gson.annotations.SerializedName;
 
