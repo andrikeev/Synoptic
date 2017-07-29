@@ -9,15 +9,17 @@ import io.reactivex.SingleSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import ru.andrikeev.android.synoptic.model.data.PredictionModel;
+import ru.andrikeev.android.synoptic.model.data.SuggestionModel;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.GooglePlacesApi;
 import ru.andrikeev.android.synoptic.model.network.googleplaces.GooglePlacesService;
 import ru.andrikeev.android.synoptic.model.network.googleplaces.ResponceConverter;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.responseplaces.Location;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.responseplaces.PlacesResponse;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.responsepredictions.PredictionsResponse;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.places.Location;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.places.PlacesResponse;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.suggestions.SuggestionsResponse;
 import ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherService;
 import ru.andrikeev.android.synoptic.model.network.openweather.response.WeatherResponse;
 import ru.andrikeev.android.synoptic.model.persistence.Weather;
+import timber.log.Timber;
 
 /**
  * Created by overtired on 28.07.17.
@@ -37,13 +39,13 @@ public class CityResolver {
         this.converter = converter;
     }
 
-    public Single<List<PredictionModel>> loadPredictions(@NonNull String input){
+    public Single<List<SuggestionModel>> loadPredictions(@NonNull String input){
         return placesService.loadPredictions(input)
                 .subscribeOn(Schedulers.io())
-                .map(new Function<PredictionsResponse, List<PredictionModel>>() {
+                .map(new Function<SuggestionsResponse, List<SuggestionModel>>() {
                     @Override
-                    public List<PredictionModel> apply(@NonNull PredictionsResponse predictionsResponse) throws Exception {
-                        return ResponceConverter.toViewModel(predictionsResponse);
+                    public List<SuggestionModel> apply(@NonNull SuggestionsResponse suggestionsResponse) throws Exception {
+                        return ResponceConverter.toViewModel(suggestionsResponse);
                     }
                 });
     }
@@ -53,7 +55,8 @@ public class CityResolver {
                 .map(new Function<PlacesResponse, Location>() {
                     @Override
                     public Location apply(@NonNull PlacesResponse placesResponse) throws Exception {
-                        if(placesResponse.getResultPlace()!=null) {
+                        Timber.d("Status",placesResponse.getStatus());
+                        if(placesResponse.getStatus().equals(GooglePlacesApi.STATUS_OK)) {
                             return placesResponse.getResultPlace().getGeometry().getLocation();
                         }else {
                             throw new Exception("Couldn't load this city");

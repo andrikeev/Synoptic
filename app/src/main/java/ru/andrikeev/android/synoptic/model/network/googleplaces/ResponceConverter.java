@@ -5,23 +5,23 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.andrikeev.android.synoptic.model.data.PredictionModel;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.responsepredictions.Prediction;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.responsepredictions.PredictionsResponse;
+import ru.andrikeev.android.synoptic.model.data.SuggestionModel;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.suggestions.Suggestion;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.suggestions.SuggestionsResponse;
 
 /**
  * Created by overtired on 26.07.17.
  */
 
 public class ResponceConverter {
-    public static List<PredictionModel> toViewModel(@NonNull PredictionsResponse response){
-        List<PredictionModel> predictions = new ArrayList<>();
+    public static List<SuggestionModel> toViewModel(@NonNull SuggestionsResponse response){
+        List<SuggestionModel> predictions = new ArrayList<>();
 
-        for(Prediction prediction:response.getPredictions()){
-            String name = prediction.getDescription();
-            String placeId = prediction.getPlaceId();
+        for(Suggestion suggestion :response.getSuggestions()){
+            String name = suggestion.getDescription();
+            String placeId = suggestion.getPlaceId();
 
-            predictions.add(new PredictionModel(placeId,name));
+            predictions.add(new SuggestionModel(placeId,name));
         }
 
         return predictions;
