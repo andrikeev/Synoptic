@@ -1,4 +1,4 @@
-package ru.andrikeev.android.synoptic.model.network.googleplaces.responsepredictions;
+package ru.andrikeev.android.synoptic.model.network.googleplaces.suggestions;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by overtired on 26.07.17.
  */
 
-public class Prediction {
+public class Suggestion {
     @SerializedName("description")
     private String description;
     @SerializedName("place_id")

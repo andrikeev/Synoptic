@@ -1,6 +1,6 @@
 package ru.andrikeev.android.synoptic.ui.fragment.city;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.andrikeev.android.synoptic.R;
-import ru.andrikeev.android.synoptic.model.data.PredictionModel;
+import ru.andrikeev.android.synoptic.model.data.SuggestionModel;
 import ru.andrikeev.android.synoptic.presentation.presenter.city.CityPresenter;
 
 /**
@@ -21,17 +21,15 @@ import ru.andrikeev.android.synoptic.presentation.presenter.city.CityPresenter;
 
 public class CityAdapter extends Adapter<CityAdapter.CityHolder>{
 
-    private List<PredictionModel> cities;
-    private Context context;
-    private CityPresenter presenter;
+    private List<SuggestionModel> cities;
+    private OnCityClickListener listener;
 
-    public CityAdapter(Context context, CityPresenter presenter){
+    public CityAdapter(@NonNull OnCityClickListener listener){
         this.cities = new ArrayList<>();
-        this.context = context;
-        this.presenter = presenter;
+        this.listener = listener;
     }
 
-    public void add(List<PredictionModel> cities){
+    public void add(List<SuggestionModel> cities){
         this.cities.addAll(cities);
     }
 
@@ -41,9 +39,9 @@ public class CityAdapter extends Adapter<CityAdapter.CityHolder>{
 
     @Override
     public CityHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.item_city,parent,false);
-        return new CityHolder(v);
+        return new CityHolder(v,listener);
     }
 
     @Override
@@ -56,18 +54,22 @@ public class CityAdapter extends Adapter<CityAdapter.CityHolder>{
         return cities.size();
     }
 
-    public class CityHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class CityHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private PredictionModel city;
+        private SuggestionModel city;
+        private OnCityClickListener listener;
         private TextView textView;
 
-        public CityHolder(View view){
+
+        public CityHolder(View view, OnCityClickListener listener){
             super(view);
-            textView = view.findViewById(R.id.city_text);
+            this.textView = view.findViewById(R.id.city_text);
+            this.listener = listener;
+
             view.setOnClickListener(this);
         }
 
-        public void setCity(PredictionModel city){
+        public void setCity(SuggestionModel city){
             this.city = city;
             updateHolder();
         }
@@ -78,7 +80,7 @@ public class CityAdapter extends Adapter<CityAdapter.CityHolder>{
 
         @Override
         public void onClick(View view) {
-            presenter.loadCity(city.getPlaceID());
+            listener.onCityClick(city);
         }
     }
 }

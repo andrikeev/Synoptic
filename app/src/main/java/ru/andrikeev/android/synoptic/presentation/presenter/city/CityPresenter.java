@@ -1,17 +1,26 @@
 package ru.andrikeev.android.synoptic.presentation.presenter.city;
 
 
+import android.support.annotation.NonNull;
+
 import com.arellomobile.mvp.InjectViewState;
 
+import org.reactivestreams.Subscription;
+
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import io.reactivex.annotations.NonNull;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import ru.andrikeev.android.synoptic.application.Settings;
 import ru.andrikeev.android.synoptic.model.CityResolver;
-import ru.andrikeev.android.synoptic.model.data.PredictionModel;
+import ru.andrikeev.android.synoptic.model.data.SuggestionModel;
 import ru.andrikeev.android.synoptic.presentation.presenter.RxPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.CityView;
 
@@ -26,33 +35,13 @@ public class CityPresenter extends RxPresenter<CityView> {
 
     private CityResolver cityResolver;
 
-    private Consumer<String> consumer = new Consumer<String>() {
-        @Override
-        public void accept(@NonNull String input) throws Exception {
-            cityResolver.loadPredictions(input)
-                    .subscribe(new Consumer<List<PredictionModel>>() {
-                        @Override
-                        public void accept(@NonNull List<PredictionModel> predictionModels) throws Exception {
-                            getViewState().updateList(predictionModels);
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(@NonNull Throwable throwable) throws Exception {
-                            getViewState().showError();
-                        }
-                    });
-        }
-    };
+    private Disposable textChangedSubscription;
 
     @Inject
     public CityPresenter(@NonNull CityResolver cityResolver,
                          @NonNull Settings settings) {
         this.cityResolver = cityResolver;
         this.settings = settings;
-    }
-
-    public Consumer<String> getConsumer() {
-        return consumer;
     }
 
     public void loadCity(final String placeId) {
@@ -73,5 +62,45 @@ public class CityPresenter extends RxPresenter<CityView> {
                         getViewState().hideLoading();
                     }
                 });
+    }
+
+    public void onTextChanged(Observable<CharSequence> observable){
+        textChangedSubscription = observable
+                .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .filter(new Predicate<CharSequence>() {
+                    @Override
+                    public boolean test(@NonNull CharSequence charSequence) throws Exception {
+                        return charSequence.length() > 0;
+                    }
+                }).map(new Function<CharSequence, String>() {
+
+                    @Override
+                    public String apply(@NonNull CharSequence charSequence) throws Exception {
+                        return charSequence.toString();
+                    }
+                }).subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(@NonNull String input) throws Exception {
+                        cityResolver.loadPredictions(input)
+                                .subscribe(new Consumer<List<SuggestionModel>>() {
+                                    @Override
+                                    public void accept(@NonNull List<SuggestionModel> suggestionModels) throws Exception {
+                                        getViewState().updateList(suggestionModels);
+                                    }
+                                }, new Consumer<Throwable>() {
+                                    @Override
+                                    public void accept(@NonNull Throwable throwable) throws Exception {
+                                        getViewState().showError();
+                                    }
+                                });
+                    }
+                });
+    }
+
+    public void onDestroyView(){
+        if(textChangedSubscription!=null){
+            textChangedSubscription.dispose();
+            textChangedSubscription = null;
+        }
     }
 }

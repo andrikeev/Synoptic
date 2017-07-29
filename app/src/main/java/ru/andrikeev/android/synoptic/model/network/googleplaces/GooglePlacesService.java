@@ -9,8 +9,8 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.application.Settings;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.responseplaces.PlacesResponse;
-import ru.andrikeev.android.synoptic.model.network.googleplaces.responsepredictions.PredictionsResponse;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.places.PlacesResponse;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.suggestions.SuggestionsResponse;
 
 /**
  * Created by overtired on 25.07.17.
@@ -41,7 +41,7 @@ public class GooglePlacesService {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<PredictionsResponse> loadPredictions(String input){
+    public Single<SuggestionsResponse> loadPredictions(String input){
         return api.getPredictions(apiKey,input,settings.getLocale())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
