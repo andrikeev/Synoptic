@@ -4,8 +4,8 @@ package ru.andrikeev.android.synoptic.model.data;
  * Created by overtired on 26.07.17.
  */
 
-public class PredictionModel {
-    public PredictionModel(String placeID, String name){
+public class SuggestionModel {
+    public SuggestionModel(String placeID, String name){
         this.placeID = placeID;
         this.name = name;
     }

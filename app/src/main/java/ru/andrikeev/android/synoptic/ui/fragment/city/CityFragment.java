@@ -19,15 +19,11 @@ import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import ru.andrikeev.android.synoptic.R;
-import ru.andrikeev.android.synoptic.model.data.PredictionModel;
+import ru.andrikeev.android.synoptic.model.data.SuggestionModel;
 import ru.andrikeev.android.synoptic.presentation.presenter.city.CityPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.CityView;
 import ru.andrikeev.android.synoptic.ui.fragment.BaseFragment;
@@ -36,7 +32,7 @@ import ru.andrikeev.android.synoptic.ui.fragment.BaseFragment;
  * Created by overtired on 25.07.17.
  */
 
-public class CityFragment extends BaseFragment<CityView, CityPresenter> implements CityView {
+public class CityFragment extends BaseFragment<CityView, CityPresenter> implements CityView, OnCityClickListener {
     private ImageView searchImage;
     private EditText editText;
     private RecyclerView recyclerView;
@@ -61,23 +57,11 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
         progressBar = view.findViewById(R.id.progress_bar);
         recyclerView = view.findViewById(R.id.recycler_city);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new CityAdapter(getActivity(),presenter);
+        adapter = new CityAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        RxTextView.textChanges(editText)
-                .debounce(400, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .filter(new Predicate<CharSequence>() {
-                    @Override
-                    public boolean test(@NonNull CharSequence charSequence) throws Exception {
-                        return charSequence.length() > 0;
-                    }
-                }).map(new Function<CharSequence, String>() {
+        presenter.onTextChanged(RxTextView.textChanges(editText));
 
-                    @Override
-                    public String apply(@NonNull CharSequence charSequence) throws Exception {
-                        return charSequence.toString();
-                    }
-                }).subscribe(presenter.getConsumer());
     }
 
     @Override
@@ -91,7 +75,7 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
     }
 
     @Override
-    public void updateList(@NonNull List<PredictionModel> cities) {
+    public void updateList(@NonNull List<SuggestionModel> cities) {
         adapter.clear();
         adapter.add(cities);
         adapter.notifyItemRangeChanged(0,cities.size());
@@ -131,5 +115,16 @@ public class CityFragment extends BaseFragment<CityView, CityPresenter> implemen
     @Override
     public void showError() {
         Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show(); // TODO: show error
+    }
+
+    @Override
+    public void onCityClick(@NonNull SuggestionModel model) {
+        presenter.loadCity(model.getPlaceID());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.onDestroyView();
     }
 }

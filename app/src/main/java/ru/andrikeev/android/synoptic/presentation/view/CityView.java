@@ -6,14 +6,14 @@ import com.arellomobile.mvp.MvpView;
 
 import java.util.List;
 
-import ru.andrikeev.android.synoptic.model.data.PredictionModel;
+import ru.andrikeev.android.synoptic.model.data.SuggestionModel;
 
 /**
  * Created by overtired on 25.07.17.
  */
 
 public interface CityView extends MvpView{
-    void updateList(@NonNull List<PredictionModel> cities);
+    void updateList(@NonNull List<SuggestionModel> cities);
     void showLoading();
     void hideLoading();
     void hideProgressAndExit();
