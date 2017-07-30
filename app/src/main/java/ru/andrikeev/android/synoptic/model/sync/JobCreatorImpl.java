@@ -5,17 +5,22 @@ import android.support.annotation.NonNull;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import ru.andrikeev.android.synoptic.model.repository.WeatherRepository;
 
 /**
  * Job creator.
  */
+@Singleton
 public class JobCreatorImpl implements JobCreator {
 
     @NonNull
     private WeatherRepository repository;
 
-    public JobCreatorImpl(@NonNull WeatherRepository repository) {
+    @Inject
+    JobCreatorImpl(@NonNull WeatherRepository repository) {
         this.repository = repository;
     }
 
