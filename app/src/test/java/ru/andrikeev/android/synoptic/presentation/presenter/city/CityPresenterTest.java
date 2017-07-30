@@ -8,6 +8,7 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import ru.andrikeev.android.synoptic.application.Settings;
 import ru.andrikeev.android.synoptic.model.CityResolver;
@@ -36,7 +37,7 @@ public class CityPresenterTest {
 
     @Test
     public void inputTextProcessing(){
-        presenter.onTextChanged(Observable.<CharSequence>empty().observeOn(Schedulers.trampoline()));
+        presenter.onTextChanged(Observable.<CharSequence>empty());
 
 
         //verify(presenter).loadCity("1235");

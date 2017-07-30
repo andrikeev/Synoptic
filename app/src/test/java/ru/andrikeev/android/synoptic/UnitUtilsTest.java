@@ -1,15 +1,14 @@
 package ru.andrikeev.android.synoptic;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.junit.Assert.*;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import ru.andrikeev.android.synoptic.utils.UnitsUtils;
 import ru.andrikeev.android.synoptic.utils.units.TemperatureUnits;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by overtired on 27.07.17.

@@ -16,6 +16,8 @@ import ru.andrikeev.android.synoptic.model.persistence.Weather;
 import ru.andrikeev.android.synoptic.utils.units.TemperatureUnits;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.contains;
 
 /**
  * Created by overtired on 27.07.17.
@@ -24,6 +26,7 @@ import static org.junit.Assert.assertEquals;
 public class ModelConverterImplTest {
     private static double delta = 0.0000001;
 
+    private Context context;
     private ModelsConverter converter;
 
     private String jsonExample = "{\n" +
@@ -91,7 +94,7 @@ public class ModelConverterImplTest {
             "˚C",
             "1019 Pa",
             "77%",
-            "4.6666",
+            "5",
             2130837607,
             "40%"
     );
@@ -100,29 +103,27 @@ public class ModelConverterImplTest {
     @Before
     public void prepareConverter() {
         Settings settings = Mockito.mock(Settings.class);
-        Context context = Mockito.mock(Context.class);
+        context = Mockito.mock(Context.class);
 
         Mockito.when(settings.getLocale()).thenReturn("ru");
         Mockito.when(settings.getTempUnits()).thenReturn(TemperatureUnits.CELSIUS);
-
-        Mockito.when(context.getString(R.string.pref_temp_units_celsius_sign))
-                .thenReturn("˚C");
-        Mockito.when(context.getString(R.string.weather_pressure_pascals,1019))
-                .thenReturn("1019 Pa");
-        Mockito.when(context.getString(R.string.weather_humidity,77))
-                .thenReturn("77%");
-        Mockito.when(context.getString(R.string.weather_wind_mph, 5))
-                .thenReturn("5000");
-        Mockito.when(context.getString(R.string.weather_clouds,40))
-                .thenReturn("40%");
-
-        //TODO: Fix, why does return null
 
         converter = new ModelsConverterImpl(settings, context);
     }
 
     @Test
     public void toViewModel(){
+        Mockito.when(context.getString(R.string.pref_temp_units_celsius_sign))
+                .thenReturn("˚C");
+        Mockito.when(context.getString(R.string.weather_pressure_pascals,1019))
+                .thenReturn("1019 Pa");
+        Mockito.when(context.getString(R.string.weather_humidity,77))
+                .thenReturn("77%");
+        Mockito.when(context.getString(R.string.weather_wind_mps, 5))
+                .thenReturn("5");
+        Mockito.when(context.getString(R.string.weather_clouds,40))
+                .thenReturn("40%");
+
         WeatherModel model = converter.toViewModel(expWeather);
 
         assertEquals(expWeatherModel.getCityName(),model.getCityName());
@@ -133,13 +134,13 @@ public class ModelConverterImplTest {
         assertEquals(expWeatherModel.getTemperatureUnits(),model.getTemperatureUnits());
         assertEquals(expWeatherModel.getPressure(),model.getPressure());
         assertEquals(expWeatherModel.getHumidity(),model.getHumidity());
-        assertEquals(expWeatherModel.getWindSpeed(),model.getWindSpeed());
+        assertEquals("WindSpeed",expWeatherModel.getWindSpeed(),model.getWindSpeed());
         assertEquals(expWeatherModel.getWindDirectionIconId(),model.getWeatherIconId());
         assertEquals(expWeatherModel.getClouds(),model.getClouds());
     }
 
     @Test
-    public void toDbModel(){
+    public void toCacheModel(){
         WeatherResponse weatherResponse = new Gson()
                 .fromJson(jsonExample,WeatherResponse.class);
 
@@ -156,6 +157,5 @@ public class ModelConverterImplTest {
         assertEquals(expWeather.getWindSpeed(),weather.getWindSpeed(),delta);
         assertEquals(expWeather.getWindDegree(),weather.getWindDegree(),delta);
         assertEquals(expWeather.getClouds(),weather.getClouds(),delta);
-
     }
 }
