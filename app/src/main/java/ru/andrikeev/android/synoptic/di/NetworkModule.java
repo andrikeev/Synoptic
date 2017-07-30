@@ -14,10 +14,12 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.andrikeev.android.synoptic.BuildConfig;
-import ru.andrikeev.android.synoptic.model.network.OpenWeatherApi;
+import ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherApi;
+import ru.andrikeev.android.synoptic.model.network.googleplaces.GooglePlacesApi;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static ru.andrikeev.android.synoptic.model.network.OpenWeatherService.API_KEY_NAME;
+import static ru.andrikeev.android.synoptic.model.network.openweather.OpenWeatherService.API_KEY_NAME;
+import static ru.andrikeev.android.synoptic.model.network.googleplaces.GooglePlacesService.API_KEY_PLACES;
 
 /**
  * Module for network dependencies.
@@ -25,7 +27,8 @@ import static ru.andrikeev.android.synoptic.model.network.OpenWeatherService.API
 @Module
 final class NetworkModule {
 
-    private static final String BASE_URL_NAME = "base_url";
+    private static final String BASE_URL_WEATHER = "base_url_weather";
+    private static final String BASE_URL_PLACES = "base_url_places";
 
     /**
      * API key for Open Weather Api
@@ -38,15 +41,34 @@ final class NetworkModule {
         return BuildConfig.API_KEY;
     }
 
+    @Provides
+    @Singleton
+    @Named(API_KEY_PLACES)
+    @NonNull
+    String provideApiPlacesKey(){
+        return BuildConfig.API_KEY_PLACES;
+    }
+
     /**
      * Base API URL.
      */
     @Provides
     @Singleton
-    @Named(BASE_URL_NAME)
+    @Named(BASE_URL_PLACES)
+    @NonNull
+    String provideBaseUrlPlaces() {
+        return BuildConfig.BASE_URL_PLACES;
+    }
+
+    /**
+     * Base API URL.
+     */
+    @Provides
+    @Singleton
+    @Named(BASE_URL_WEATHER)
     @NonNull
     String provideBaseUrl() {
-        return BuildConfig.BASE_URL;
+        return BuildConfig.BASE_URL_WEATHER;
     }
 
     /**
@@ -88,8 +110,8 @@ final class NetworkModule {
     @Provides
     @Singleton
     @NonNull
-    OpenWeatherApi provideApi(@NonNull @Named(BASE_URL_NAME) String baseUrl,
-                              @NonNull OkHttpClient client) {
+    OpenWeatherApi provideWeatherApi(@NonNull @Named(BASE_URL_WEATHER) String baseUrl,
+                                     @NonNull OkHttpClient client) {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(client)
@@ -97,5 +119,18 @@ final class NetworkModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(OpenWeatherApi.class);
+    }
+
+    @Provides
+    @Singleton
+    @NonNull
+    GooglePlacesApi providePlacesApi(@NonNull @Named(BASE_URL_PLACES) String baseUrl,@NonNull OkHttpClient client){
+        return new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build()
+                .create(GooglePlacesApi.class);
     }
 }

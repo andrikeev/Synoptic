@@ -1,5 +1,7 @@
 package ru.andrikeev.android.synoptic.ui.fragment.weather;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,9 +19,15 @@ import ru.andrikeev.android.synoptic.R;
 import ru.andrikeev.android.synoptic.model.data.WeatherModel;
 import ru.andrikeev.android.synoptic.presentation.presenter.weather.WeatherPresenter;
 import ru.andrikeev.android.synoptic.presentation.view.WeatherView;
+import ru.andrikeev.android.synoptic.ui.activity.city.CityActivity;
 import ru.andrikeev.android.synoptic.ui.fragment.BaseFragment;
 
 public class WeatherFragment extends BaseFragment<WeatherView, WeatherPresenter> implements WeatherView {
+
+    public static final String EXTRA_LON = "extra_lon";
+    public static final String EXTRA_LAT = "extra_lat";
+
+    private static final int REQUEST_CITY = 0;
 
     private SwipeRefreshLayout refreshLayout;
     private TextView cityName;
@@ -62,6 +70,14 @@ public class WeatherFragment extends BaseFragment<WeatherView, WeatherPresenter>
         wind = view.findViewById(R.id.wind);
         windDirection = view.findViewById(R.id.windDirection);
         clouds = view.findViewById(R.id.clouds);
+
+        cityName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = CityActivity.getIntent(getActivity());
+                startActivityForResult(intent, REQUEST_CITY);
+            }
+        });
 
         refreshLayout = view.findViewById(R.id.refreshLayout);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -116,5 +132,12 @@ public class WeatherFragment extends BaseFragment<WeatherView, WeatherPresenter>
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == REQUEST_CITY && resultCode == Activity.RESULT_OK){
+            presenter.fetchWeather();
+        }
     }
 }

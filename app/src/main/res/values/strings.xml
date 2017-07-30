@@ -59,4 +59,12 @@
     <string name="about_rate_app_key" translatable="false">pref_keys.rate_app</string>
     <string name="about_view_licenses_key" translatable="false">pref_keys.licenses</string>
     <string name="about_version_key" translatable="false">pref_keys.version</string>
+
+    <!-- City -->
+    <string name="city_activity_title">Select city</string>
+
+    <string name="pref_city_name" translatable="false">pref_keys.city_name</string>
+    <string name="pref_city_id" translatable="false">pref_keys.city_id</string>
+
+    <string name="pref_city_id_default" translatable="false">5601538</string>
 </resources>
