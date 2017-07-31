@@ -1,12 +1,22 @@
 package ru.andrikeev.android.synoptic.model;
 
 import android.content.Context;
+import android.os.SystemClock;
+import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import ru.andrikeev.android.synoptic.R;
 import ru.andrikeev.android.synoptic.application.Settings;
@@ -29,48 +39,7 @@ public class ModelConverterImplTest {
     private Context context;
     private ModelsConverter converter;
 
-    private String jsonExample = "{\n" +
-            "  \"coord\": {\n" +
-            "    \"lon\": 145.77,\n" +
-            "    \"lat\": -16.92\n" +
-            "  },\n" +
-            "  \"weather\": [\n" +
-            "    {\n" +
-            "      \"id\": 802,\n" +
-            "      \"main\": \"Clouds\",\n" +
-            "      \"description\": \"scattered clouds\",\n" +
-            "      \"icon\": \"03n\"\n" +
-            "    }\n" +
-            "  ],\n" +
-            "  \"base\": \"stations\",\n" +
-            "  \"main\": {\n" +
-            "    \"temp\": 294.15,\n" +
-            "    \"pressure\": 1019,\n" +
-            "    \"humidity\": 77,\n" +
-            "    \"temp_min\": 294.15,\n" +
-            "    \"temp_max\": 294.15\n" +
-            "  },\n" +
-            "  \"visibility\": 10000,\n" +
-            "  \"wind\": {\n" +
-            "    \"speed\": 4.6,\n" +
-            "    \"deg\": 180\n" +
-            "  },\n" +
-            "  \"clouds\": {\n" +
-            "    \"all\": 40\n" +
-            "  },\n" +
-            "  \"dt\": 1501164000,\n" +
-            "  \"sys\": {\n" +
-            "    \"type\": 1,\n" +
-            "    \"id\": 8166,\n" +
-            "    \"message\": 0.0021,\n" +
-            "    \"country\": \"AU\",\n" +
-            "    \"sunrise\": 1501101836,\n" +
-            "    \"sunset\": 1501142586\n" +
-            "  },\n" +
-            "  \"id\": 2172797,\n" +
-            "  \"name\": \"Cairns\",\n" +
-            "  \"cod\": 200\n" +
-            "}";
+    private String jsonExample;
 
     private Weather expWeather = new Weather(
             2172797,
@@ -109,10 +78,13 @@ public class ModelConverterImplTest {
         Mockito.when(settings.getTempUnits()).thenReturn(TemperatureUnits.CELSIUS);
 
         converter = new ModelsConverterImpl(settings, context);
+
+        jsonExample = getJson("WeatherExample.json");
     }
 
     @Test
     public void toViewModel(){
+
         Mockito.when(context.getString(R.string.pref_temp_units_celsius_sign))
                 .thenReturn("˚C");
         Mockito.when(context.getString(R.string.weather_pressure_pascals,1019))
@@ -157,5 +129,23 @@ public class ModelConverterImplTest {
         assertEquals(expWeather.getWindSpeed(),weather.getWindSpeed(),delta);
         assertEquals(expWeather.getWindDegree(),weather.getWindDegree(),delta);
         assertEquals(expWeather.getClouds(),weather.getClouds(),delta);
+    }
+
+    private String getJson(@NonNull String path){
+        String str;
+
+        try {
+            File file = new File("./app/src/test/res/"+path);
+            FileInputStream fis = new FileInputStream(file);
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            fis.close();
+
+             str = new String(data, "UTF-8");
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return str;
     }
 }
