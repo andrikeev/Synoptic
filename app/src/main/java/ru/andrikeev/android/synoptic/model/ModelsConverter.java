@@ -10,7 +10,6 @@ import ru.andrikeev.android.synoptic.model.persistence.Weather;
  * Converting models.
  */
 public interface ModelsConverter {
-
     /**
      * Convert cached weather model to view model.
      */
